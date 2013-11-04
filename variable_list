@@ -1,0 +1,41 @@
+<% guest.name %>
+<% guest.memory %> = 2048 (2097152)
+guest.current_memory 
+guest.vcpu = 4 
+guest.arch = x86_64
+
+guest.disk_name = ubuntu-server-13.04-x86_64-rbd
+
+system.rbd_pool = libvirt-pool
+system.rbd_hosts = qw( 192.168.0.2 192.168.0.35 192.168.0.40 )
+
+guest.interface = bridge
+guest.bridge = ovsbr0 
+guest.virtualport_type = openvswitch
+
+
+  <source protocol='rbd' name='libvirt-pool/ubuntu-server-13.04-x86_64-rbd'>
+        <host name='192.168.0.40' port='6789'/>
+        <host name='192.168.0.35' port='6789'/>
+        <host name='192.168.0.2' port='6789'/>
+      </source>
+
+    [% FOREACH disk IN guest.disks %]
+    <disk type='network' device='disk'>
+      <driver name='qemu'/>
+      <source protocol='rbd' name='[% system.rbd_pool %]/[% disk %]'>
+        [% FOREACH rbd_host IN system.rbd_hosts %]
+        <host name='[%rbd_host %]' port='6789'/>
+        [% END %]
+      </source>
+    </disk>
+    [% END %]
+    [% IF guest.cdrom %]
+    <disk type='file' device='cdrom'>
+      <driver name='qemu' type='raw'/>
+      <source file='guest.cdrom'/>
+      <target dev='hdc' bus='ide'/>
+      <readonly/>
+      <address type='drive' controller='0' bus='1' target='0' unit='0'/>
+    </disk>
+    [% END %]
