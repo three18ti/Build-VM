@@ -16,16 +16,22 @@ has 'memory'    => (
 );
 
 has 'disk_list' => (
-    isa             => 'ArrayRef[Str]',
+    isa             => 'ArrayRef[ArrayRef]',
     required        => 1,
     traits          => ['Array'],
     handles         => {
-        disks   => 'elements',
+        disks       => 'elements',
+        add_disk    => 'push'
     }
 );
 
-has 'cdrom'     => (
-    isa             => 'Str',
+has 'cdrom_list'     => (
+    isa             => 'ArrayRef[ArrayRef]',
+    traits          => ['Array'],
+    handles         => {
+        cdroms      => 'elements',
+        add_cdrom   => 'push',
+    }
 );
 
 has 'current_memory'    => (
@@ -57,7 +63,7 @@ has 'bridge'    => (
 
 has 'virtualport_type' => (
     isa             => 'Str',
-    default         => 'virtualport_type',
+    default         => 'openvswitch',
 );
 
 no Moose;

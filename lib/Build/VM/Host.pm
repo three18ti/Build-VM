@@ -1,4 +1,4 @@
-package Build::VM::System;
+package Build::VM::Host;
 use Moose;
 use strict;
 use warnings;
@@ -10,7 +10,7 @@ has 'rbd_pool'  => (
 );
 
 has 'rbd_hosts_list' => (
-    isa     => 'ArrayRef',
+    isa     => 'ArrayRef[Str]',
     required => 1,
     traits => ['Array'],
     handles => {
