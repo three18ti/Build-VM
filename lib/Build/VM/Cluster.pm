@@ -1,4 +1,4 @@
-package Build::VM::Host;
+package Build::VM::Cluster;
 use Moose;
 use strict;
 use warnings;
@@ -18,7 +18,10 @@ has 'rbd_hosts_list' => (
     },
 );
 
-
+has 'hypervisor_list' => (
+    isa     => 'ArrayRef[]',
+    default => sub { [] },
+);
 
 no Moose;
 __PACKAGE__->meta->make_immutable;
