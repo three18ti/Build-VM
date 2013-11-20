@@ -1,10 +1,10 @@
 <domain type='kvm'>
-  <name>[% guest.name %]</name>
-  <memory unit='KiB'>[% guest.memory %]</memory>
-  <currentMemory unit='KiB'>[% guest.current_memory %]</currentMemory>
-  <vcpu placement='static'>[% guest.vcpu %]</vcpu>
+  <name>ubuntu-13.10-media-server</name>
+  <memory unit='KiB'>4194304</memory>
+  <currentMemory unit='KiB'>4194304</currentMemory>
+  <vcpu placement='static'>2</vcpu>
   <os>
-    <type arch='[% guest.arch%]' machine='pc-i440fx-1.4'>hvm</type>
+    <type arch='x86_64' machine='pc-i440fx-1.4'>hvm</type>
     <boot dev='hd'/>
     <bootmenu enable='no'/>
   </os>
@@ -19,29 +19,19 @@
   <on_crash>restart</on_crash>
   <devices>
     <emulator>/usr/bin/kvm</emulator>
-    [%- FOREACH disk IN guest.disk_list %]
     <disk type='network' device='disk'>
       <driver name='qemu'/>
-      <source protocol='rbd' name='[%- host.rbd_pool -%]/[%- disk.0 -%]'>
-        [%- FOREACH rbd_host IN host.rbd_hosts %]
-        <host name='[%- rbd_host -%]' port='6789'/>
-        [%- END %]
+      <source protocol='rbd' name='libvirt-pool/ubuntu-13.10-media-server'>
+        <host name='192.168.0.2' port='6789'/>
+        <host name='192.168.0.35' port='6789'/>
+        <host name='192.168.0.40' port='6789'/>
       </source>
-      <target dev='[%- disk.1 -%]' bus='virtio' />
-    </disk>
-    [%- END -%]
-    [%- FOREACH cdrom IN guest.cdrom_list %]
-    <disk type='file' device='cdrom'>
-      <driver name='qemu' type='raw'/>
-      <source file='[%- cdrom.0 -%]'/>
-      <readonly/>
-      <target dev='[%- cdrom.1 -%]' bus='virtio' />
-    </disk>
-    [%- END %]  
+      <target dev='hda' bus='ide' />
+    </disk>  
 
-    <interface type='[% guest.interface %]'>
-      <source bridge='[% guest.bridge %]'/>
-      <virtualport type='[%- guest.virtualport_type -%]'>
+    <interface type='bridge'>
+      <source bridge='ovsbr0'/>
+      <virtualport type='openvswitch'>
       </virtualport>
       <model type='virtio'/>
     </interface>

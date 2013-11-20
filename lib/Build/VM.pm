@@ -10,7 +10,6 @@ use Sys::Guestfs;
 
 
 
-
 sub to_kib {
     my $self = shift;
     my $mb = shift;
