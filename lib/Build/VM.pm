@@ -92,7 +92,7 @@ has hvm         => (
     }
 );
 
-has asdf => (
+has template_xml => (
     isa     => 'Str',
     builder => 'build_template',
 );
