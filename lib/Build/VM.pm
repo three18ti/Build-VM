@@ -92,7 +92,7 @@ has hvm         => (
     }
 );
 
-has template_xml => (
+has guest_template_xml => (
     isa     => 'Str',
     builder => 'build_template',
 );

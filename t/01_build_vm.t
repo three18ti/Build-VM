@@ -21,7 +21,7 @@ my $bvm = new_ok 'Build::VM' => [
 
 #is_deeply $bvm->host->, "192.168.0.35192.168.0.2192.168.0.40",
 #    "rbd hosts are as expected";
-is $bvm->template_xml, get_template_xml(),
+is $bvm->guest_template_xml, get_template_xml(),
     "template is generated properly";
 
 $bvm->build_disks;
