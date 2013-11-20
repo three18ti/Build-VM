@@ -19,12 +19,13 @@ my $bvm = new_ok 'Build::VM' => [
     'hvm_address'       => '192.168.0.35',
 ];
 
-#is $bvm->host->, "192.168.0.35192.168.0.2192.168.0.40",
+#is_deeply $bvm->host->, "192.168.0.35192.168.0.2192.168.0.40",
 #    "rbd hosts are as expected";
 is $bvm->template_xml, get_template_xml(),
     "template is generated properly";
 
-
+$bvm->build_disks;
+$bvm->remove_disks;
 done_testing;
 
 sub get_template_xml{

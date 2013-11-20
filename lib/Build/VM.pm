@@ -1,5 +1,6 @@
 package Build::VM;
 # ABSTRACT: turns baubles into trinkets
+use 5.010;
 use Moose;
 use strict;
 use warnings;
@@ -32,10 +33,13 @@ has rbd_hosts => (
 );
 
 has disk_names  => (
-    isa     => 'ArrayRef[Str]',
+    isa     => 'ArrayRef[ArrayRef]',
     lazy    => 1,
     default => sub {
-        [ $_[0]->guest_name . '-os', $_[0]->guest_name . '-storage' ],
+        [ 
+            [$_[0]->guest_name . '-os', undef ],
+            [$_[0]->guest_name . '-storage', '20'],
+        ],
     },
 );
 
@@ -135,6 +139,23 @@ sub build_disk_list {
         push @disk_list, [$disk_name->[0], "vd" . $disk_letter ];
     }
     return \@disk_list;   
+}
+
+sub build_disks {
+    my $self = shift;
+    foreach my $disk ( @{$self->disk_names} ) {
+        unless ( defined $disk->[1] ) {
+            $self->rbd->image_clone($disk->[0]);
+        }
+        else {
+            $self->rbd->image_create($disk->[0], $disk->[1] * 1024);
+        }
+    }
+}
+
+sub remove_disks {
+    my $self = shift;
+    $self->rbd->image_delete($_->[0]) foreach @{$self->disk_names};
 }
 
 sub to_kib {
