@@ -11,11 +11,12 @@ use Sys::Guestfs;
 use Ceph::RBD::CLI;
 use Build::VM::Host;
 use Build::VM::Guest;
+use Build::VM::Hypervisor;
 use MooseX::HasDefaults::RO;
 use File::ShareDir 'dist_dir';
 use List::MoreUtils qw( each_array );
 
-has [qw ( base_image_name snap_name guest_name) ]  => (
+has [qw ( base_image_name snap_name guest_name hvm_address) ]  => (
     isa         => 'Str',
     required    => 1
 );
@@ -77,6 +78,16 @@ has rbd         => (
     },
 );
 
+has hvm         => (
+    isa         => 'Build::VM::Hypervisor',
+    lazy        => 1,
+    default     => sub {
+        Build::VM::Hypervisor->(
+            address => $_[0]->hvm_address
+        );
+    }
+);
+
 has template_xml => (
     isa     => 'Str',
     builder => 'build_template',
@@ -121,7 +132,7 @@ sub build_disk_list {
     my $disk_it = each_array @{$disk_names}, @disk_letters;
     my @disk_list;
     while ( my ( $disk_name, $disk_letter ) = $disk_it->() ){
-        push @disk_list, [$disk_name, "vd" . $disk_letter ];
+        push @disk_list, [$disk_name->[0], "vd" . $disk_letter ];
     }
     return \@disk_list;   
 }

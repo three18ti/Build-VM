@@ -21,6 +21,17 @@ has 'uri'       => (
     },
 );
 
+has vmm         => (
+    isa         => 'Sys::Virt',
+    lazy        => 1,
+    default     => sub {
+        Sys::Virt->new(
+            uri => $_[0]->uri,
+        );
+    },
+);
+
+
 no Moose;
 __PACKAGE__->meta->make_immutable;
 1;

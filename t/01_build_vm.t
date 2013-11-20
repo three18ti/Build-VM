@@ -16,6 +16,7 @@ my $bvm = new_ok 'Build::VM' => [
     'guest_memory'      => 4096,
     'storage_disk_size' => 20,
     'rbd_hosts'         => [qw(192.168.0.35 192.168.0.2 192.168.0.40)],
+    'hvm_address'       => '192.168.0.35',
 ];
 
 #is $bvm->host->, "192.168.0.35192.168.0.2192.168.0.40",
