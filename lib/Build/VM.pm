@@ -12,6 +12,7 @@ use Ceph::RBD::CLI;
 use Build::VM::Host;
 use Build::VM::Guest;
 use MooseX::HasDefaults::RO;
+use File::ShareDir 'dist_dir';
 use List::MoreUtils qw( each_array );
 
 has [qw ( base_image_name snap_name guest_name) ]  => (
@@ -76,11 +77,10 @@ has rbd         => (
     },
 );
 
-#has template_xml => (
-#    is      => 'rw',
-#    isa     => 'Str',
-#    builder => 'build_template',
-#);
+has template_xml => (
+    isa     => 'Str',
+    builder => 'build_template',
+);
 
 has template_name   => (
     isa     => 'Str',
@@ -89,33 +89,41 @@ has template_name   => (
 
 has INCLUDE_PATH    => (
     isa     => 'ArrayRef[Str]',
-    default => sub { ['share', ] }
+    default => sub { ['share', eval { dist_dir 'Build-VM' } ] }
 );
 
+sub build_template {
+    my $self = shift;
+    my $tt = Template->new({
+        INCLUDE_PATH    => $self->INCLUDE_PATH, 
+    })
+    || carp "$Template::ERROR\n";
+    my $xml = '';
+    $tt->process(
+        $self->template_name,
+        {
+            guest   => $self->guest,
+            host    => $self->host,
+        },
+        \$xml,
+    );
+    return $xml;
+}
 
-#sub build_template {
-#    my $self = shift;
-#    my $tt = Template->new({
-#        INCLUDE_PATH    => $self->INCLUDE_PATH, 
-#    })
-#    || carp "$Template::ERROR\n";
-#    my $xml = '';
-#    $tt->process(
-#        $self->template_name,
-#        {
-#            guest   => $self->guest,
-#            host    => $self->host,
-#        },
-#        \$xml,
-#    );
-#    return $xml;
-#}
-
+# This can only handle 704 disks...
 sub build_disk_list {
     my $self = shift;
-    my $disk_list = shift;
+    my $disk_names = shift;
 
-    return [[$disk_list->[0], 'vda'], [$disk_list->[1], 'vdb']];
+    my @letters = 'a' .. 'zz';
+    my @disk_letters = @letters[ 0 .. $#{$disk_names} ];
+
+    my $disk_it = each_array @{$disk_names}, @disk_letters;
+    my @disk_list;
+    while ( my ( $disk_name, $disk_letter ) = $disk_it->() ){
+        push @disk_list, [$disk_name, "vd" . $disk_letter ];
+    }
+    return \@disk_list;   
 }
 
 sub to_kib {
