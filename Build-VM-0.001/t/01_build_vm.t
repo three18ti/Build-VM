@@ -9,8 +9,6 @@ use lib 'lib';
 
 BEGIN { use_ok 'Build::VM' }
 
-my $hvm_address = '192.168.0.35';
-
 my $bvm = new_ok 'Build::VM' => [
     'base_image_name'   => 'ubuntu-server-13.10-x86_64-base',
     'snap_name'         => '2013-11-13',
@@ -18,7 +16,7 @@ my $bvm = new_ok 'Build::VM' => [
     'guest_memory'      => 4096,
     'storage_disk_size' => 20,
     'rbd_hosts'         => [qw(192.168.0.35 192.168.0.2 192.168.0.40)],
-    'hvm_address'       => $hvm_address,
+    'hvm_address'       => '192.168.0.35',
     'template_name'     => 'server-no-config.tt',
 ];
 

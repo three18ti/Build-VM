@@ -36,11 +36,11 @@ sub vm_list {
     my $self = shift;
 
     my @dom_list = $self->vmm->list_domains;
-#    use Data::Dumper;
-#    say dd @dom_list;
+    use Data::Dump;
+    say dd @dom_list;
     foreach my $dom (@dom_list) {
         say sprintf "ID: %i Name %s", $dom->get_id, $dom->get_name;
-#        say Dumper $dom;
+        say dd $dom;
     }
 }
 

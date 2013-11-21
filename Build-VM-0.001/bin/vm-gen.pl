@@ -3,10 +3,14 @@ use 5.010;
 use strict;
 use warnings;
 
-use Sys::Virt;
-
 use lib 'lib';
 use Build::VM;
+
+use Getopt::Long::Descriptive;
+
+my ($opt, $usage) = describe_options (
+    'vm-gen.pl command %o',
+);
 
 my $base_image_name     = 'ubuntu-server-13.10-x86_64-base';
 my $snap_name           = '2013-11-13';
@@ -24,25 +28,23 @@ my $bvm = Build::VM->new(
     storage_disk_size   => $storage_disk_size,
     rbd_hosts           => $rbd_hosts,
     hvm_address         => $hvm_address,
-    template_name       => 'server-no-config.tt',
 );
 
-$bvm->guest_xml;
+my $commands = {
+    new     => \&new_vm,
+    list    => \&list_vm
+};
 
-my $dom = $bvm->deploy_ephemeral;
+my $command = shift @ARGV;
 
-say "Checking vm deployed";
-system "virsh list";
+$commands->{$command}->($bvm);
 
-my $uri = $bvm->hvm->uri;
-say $uri;
+sub new_vm {
+    my $bvm = shift;
+    say "new vm called";
+}
 
-#my $vmm = Sys::Virt->new( uri => $uri );
-#my @domains = $vmm->list_domains();
-
-$dom->destroy;
-
-my @domains = $bvm->hvm->list_vms;
-
-use Data::Dump;
-print dd @domains;
+sub list_vm {
+    my $bvm = shift;
+    $bvm->hvm->vm_list;
+}

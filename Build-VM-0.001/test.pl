@@ -27,22 +27,17 @@ my $bvm = Build::VM->new(
     template_name       => 'server-no-config.tt',
 );
 
-$bvm->guest_xml;
-
 my $dom = $bvm->deploy_ephemeral;
 
 say "Checking vm deployed";
 system "virsh list";
 
+__END__
 my $uri = $bvm->hvm->uri;
 say $uri;
 
-#my $vmm = Sys::Virt->new( uri => $uri );
-#my @domains = $vmm->list_domains();
-
-$dom->destroy;
-
-my @domains = $bvm->hvm->list_vms;
+my $vmm = Sys::Virt->new( uri => $uri );
+my @domains = $vmm->list_domains();
 
 use Data::Dump;
 print dd @domains;
