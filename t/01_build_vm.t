@@ -35,7 +35,7 @@ is $bvm->guest_xml, get_template_xml(),
 #use Data::Dump;
 #print dd $disk_list;
 
-$bvm->build_disks;
+#$bvm->build_disks;
 my $dom = $bvm->deploy_ephemeral;
 
 say "Check vm built now";
@@ -46,7 +46,7 @@ $bvm->hvm->vm_list;
 $dom->destroy;
 #$dom->undefine;
 
-$bvm->remove_disks;
+#$bvm->remove_disks;
 done_testing;
 
 sub get_template_xml{
