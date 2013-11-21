@@ -86,7 +86,7 @@ has hvm         => (
     isa         => 'Build::VM::Hypervisor',
     lazy        => 1,
     default     => sub {
-        Build::VM::Hypervisor->(
+        Build::VM::Hypervisor->new(
             address => $_[0]->hvm_address
         );
     }
@@ -153,6 +153,17 @@ sub build_disks {
             $self->rbd->image_create($disk->[0], $disk->[1] * 1024);
         }
     }
+}
+
+sub deploy_vm {
+    my $self = shift;
+    my $dom = $self->hvm->vmm->define_domain($self->guest_xml);
+    $dom->create;
+}
+
+sub deploy_ephemeral {
+    my $self = shift;
+    my $dom = $self->hvm->vmm->create_domain($self->guest_xml);
 }
 
 sub remove_disks {

@@ -25,6 +25,14 @@ is $bvm->guest_xml, get_template_xml(),
     "template is generated properly";
 
 $bvm->build_disks;
+my $dom = $bvm->deploy_ephemeral;
+
+say "Check vm built now";
+system "virsh list";
+
+$dom->destroy;
+#$dom->undefine;
+
 $bvm->remove_disks;
 done_testing;
 
