@@ -92,8 +92,9 @@ has hvm         => (
     }
 );
 
-has template_xml => (
+has guest_xml => (
     isa     => 'Str',
+    lazy    => 1,
     builder => 'build_template',
 );
 
@@ -104,6 +105,7 @@ has template_name   => (
 
 has INCLUDE_PATH    => (
     isa     => 'ArrayRef[Str]',
+    lazy    => 1,
     default => sub { ['share', eval { dist_dir 'Build-VM' } ] }
 );
 
