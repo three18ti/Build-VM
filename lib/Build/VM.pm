@@ -132,13 +132,12 @@ sub build_disk_list {
     my $self = shift;
     my $disk_names = shift;
 
-    my @letters = 'a' .. 'zz';
-    my @disk_letters = @letters[ 0 .. $#{$disk_names} ];
-
-    my $disk_it = each_array @{$disk_names}, @disk_letters;
     my @disk_list;
-    while ( my ( $disk_name, $disk_letter ) = $disk_it->() ){
-        push @disk_list, [$disk_name->[0], "vd" . $disk_letter ];
+    my $disk_letter = 'a';
+    
+    foreach my $disk_name ( @{$disk_names} ){
+        my $device_name = "vd" . $disk_letter++;
+        push @disk_list, [$disk_name->[0], $device_name ];
     }
     return \@disk_list;   
 }

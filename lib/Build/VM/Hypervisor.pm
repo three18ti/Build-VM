@@ -31,6 +31,17 @@ has vmm         => (
     },
 );
 
+sub vm_list {
+    my $self = shift;
+
+    my @dom_list = $self->vmm->list_domains;
+    use Data::Dump;
+    print dd @dom_list;
+#    foreach my $dom (@dom_list) {
+#        print "Domain ", $dom->get_id, " ", $dom->get_name, "\n";
+#    }
+}
+
 
 no Moose;
 __PACKAGE__->meta->make_immutable;

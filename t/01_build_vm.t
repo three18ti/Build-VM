@@ -24,6 +24,14 @@ my $bvm = new_ok 'Build::VM' => [
 is $bvm->guest_xml, get_template_xml(),
     "template is generated properly";
 
+# This works... dunno how to test it though
+#my @disk_names = map { [$_, 20] } ( "a" .. "zzz");
+#my $disk_list = $bvm->build_disk_list(\@disk_names);
+#my @expected_names = map { [$_, "vd" . $_ ] } ( "a" .. "zzz" );
+#is_deply $disk_list, \@expected_names, "Disk lists are correct";
+#use Data::Dump;
+#print dd $disk_list;
+
 $bvm->build_disks;
 my $dom = $bvm->deploy_ephemeral;
 
