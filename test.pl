@@ -14,7 +14,8 @@ my $guest_name          = 'build_vm_bin';
 my $guest_memory        = 4096;
 my $storage_disk_size   = 20;
 my $rbd_hosts           = [qw(192.168.0.35 192.168.0.2 192.168.0.40)];
-my $hvm_address         = '192.198.0.35';
+my $hvm_address         = '192.198.15.35';
+#my $hvm_address         = '192.198.0.35';
 
 my $bvm = Build::VM->new(
     base_image_name     => $base_image_name,

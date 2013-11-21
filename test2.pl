@@ -33,18 +33,18 @@ my $bvm = Build::VM->new(
 #use Data::Dump;
 #print dd $disk_list;
 
-$bvm->build_disks;
-my $dom = $bvm->deploy_ephemeral;
+#$bvm->build_disks;
+#my $dom = $bvm->deploy_ephemeral;
 
-say "Check vm built now";
-system "virsh list";
+#say "Check vm built now";
+#system "virsh list";
 
 $bvm->hvm->vm_list;
 
-$dom->destroy;
+#$dom->destroy;
 #$dom->undefine;
 
-$bvm->remove_disks;
+#$bvm->remove_disks;
 
 sub get_template_xml{
 return<<TEMPLATE_XML

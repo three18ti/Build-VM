@@ -9,7 +9,7 @@ use lib 'lib';
 
 BEGIN { use_ok 'Build::VM' }
 
-my $hvm_address = '192.168.0.35';
+my $hvm_address = '192.168.15.35';
 
 my $bvm = new_ok 'Build::VM' => [
     'base_image_name'   => 'ubuntu-server-13.10-x86_64-base',
