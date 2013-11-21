@@ -17,6 +17,7 @@ my $bvm = new_ok 'Build::VM' => [
     'storage_disk_size' => 20,
     'rbd_hosts'         => [qw(192.168.0.35 192.168.0.2 192.168.0.40)],
     'hvm_address'       => '192.168.0.35',
+    'template_name'     => 'server-no-config.tt',
 ];
 
 #is_deeply $bvm->host->, "192.168.0.35192.168.0.2192.168.0.40",
@@ -37,6 +38,8 @@ my $dom = $bvm->deploy_ephemeral;
 
 say "Check vm built now";
 system "virsh list";
+
+$bvm->hvm->vm_list;
 
 $dom->destroy;
 #$dom->undefine;

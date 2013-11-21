@@ -1,4 +1,5 @@
 package Build::VM::Hypervisor;
+use 5.010;
 use Moose;
 use strict;
 use warnings;
@@ -36,10 +37,11 @@ sub vm_list {
 
     my @dom_list = $self->vmm->list_domains;
     use Data::Dump;
-    print dd @dom_list;
-#    foreach my $dom (@dom_list) {
-#        print "Domain ", $dom->get_id, " ", $dom->get_name, "\n";
-#    }
+    say dd @dom_list;
+    foreach my $dom (@dom_list) {
+        say sprintf "ID: %i Name %s", $dom->get_id, $dom->get_name;
+        say dd $dom;
+    }
 }
 
 
