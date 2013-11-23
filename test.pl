@@ -28,7 +28,7 @@ my $bvm = Build::VM->new(
 
 $bvm->guest_xml;
 
-#my $dom = $bvm->deploy_ephemeral;
+my $dom = $bvm->deploy_ephemeral;
 
 say "Checking vm deployed";
 system "virsh list";
@@ -44,5 +44,5 @@ my @domains = $bvm->hvm->print_vm_list;
 #use Data::Dump;
 #print dd @domains;
 
-#$dom->destroy;
+$dom->destroy;
 
