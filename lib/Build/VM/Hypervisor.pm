@@ -32,15 +32,17 @@ has vmm         => (
     },
 );
 
-sub vm_list {
+sub print_vm_list {
     my $self = shift;
 
-    my @dom_list = $self->vmm->list_domains;
-#    use Data::Dumper;
-#    say dd @dom_list;
+    my @dom_list = $self->vmm->list_all_domains;
+    say sprintf "   ID:  | Name:                                     | State:    | Persistence:";
+    say sprintf "--------|-------------------------------------------|-----------|-------------";
     foreach my $dom (@dom_list) {
-        say sprintf "ID: %i Name %s", $dom->get_id, $dom->get_name;
-#        say Dumper $dom;
+        say sprintf "  % 4s  | % 40s  | % 8s  | % 10s", 
+            $dom->get_id, $dom->get_name, 
+                $dom->is_active ? "active" : "inactive", 
+                $dom->is_persistent ? "persistent" : "ephemeral";
     }
 }
 
