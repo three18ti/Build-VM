@@ -34,14 +34,14 @@ my $bvm = Build::VM->new(
 #print dd $disk_list;
 
 #$bvm->build_disks;
-#my $dom = $bvm->deploy_ephemeral;
+my $dom = $bvm->deploy_ephemeral;
 
 say "Check vm built now";
 system "virsh list";
 
 $bvm->hvm->vm_list;
 
-#$dom->destroy;
+$dom->destroy;
 #$dom->undefine;
 
 #$bvm->remove_disks;
