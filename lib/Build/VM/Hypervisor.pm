@@ -39,7 +39,7 @@ sub print_vm_list {
     say sprintf "   ID:  | Name:                                     | State:    | Persistence:";
     say sprintf "--------|-------------------------------------------|-----------|-------------";
     foreach my $dom (@dom_list) {
-        say sprintf "  % 4s  | % 40s  | % 8s  | % 10s", 
+        say sprintf "  % 4s  | % -40s  | % -8s  | % -10s", 
             $dom->get_id, $dom->get_name, 
                 $dom->is_active ? "active" : "inactive", 
                 $dom->is_persistent ? "persistent" : "ephemeral";
