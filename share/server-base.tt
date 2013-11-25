@@ -30,6 +30,7 @@
       <target dev='[%- disk.1 -%]' bus='virtio' />
     </disk>
     [%- END -%]
+    [%- IF guest.cdrom_list.0.0 %]
     [%- FOREACH cdrom IN guest.cdrom_list %]
     <disk type='file' device='cdrom'>
       <driver name='qemu' type='raw'/>
@@ -38,6 +39,7 @@
       <target dev='[%- cdrom.1 -%]' bus='virtio' />
     </disk>
     [%- END %]  
+    [%- END -%]
 
     <interface type='[% guest.interface %]'>
       <source bridge='[% guest.bridge %]'/>

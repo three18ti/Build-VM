@@ -33,11 +33,27 @@ my $bvm = Build::VM->new(
 
 my $commands = {
     new     => \&new_vm,
+    new_base => \&new_base,
     list    => \&list_vm
 };
 
 
 $commands->{$command}->($bvm);
+
+sub new_base_vm {
+    my $b = Build::VM->new(
+        base_image_name     => $base_image_name,
+        snap_name           => $snap_name,
+        guest_name          => $guest_name,
+        guest_memory        => $guest_memory,
+        storage_disk_size   => $storage_disk_size,
+        rbd_hosts           => $rbd_hosts,
+        hvm_address         => $hvm_address,
+    );
+
+    
+
+}
 
 sub new_vm {
     my $bvm = shift;

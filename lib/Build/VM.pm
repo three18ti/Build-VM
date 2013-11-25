@@ -27,6 +27,15 @@ has [qw(guest_memory storage_disk_size)] => (
     required    => 1,
 );
 
+has 'cdrom_list'     => (
+    isa             => 'ArrayRef[ArrayRef]',
+    traits          => ['Array'],
+    handles         => {
+        cdroms      => 'elements',
+        add_cdrom   => 'push',
+    }
+);
+
 has rbd_hosts => (
     isa         => 'ArrayRef[Str]',
     required    => 1,
@@ -62,6 +71,7 @@ has guest       => (
             name    => $_[0]->guest_name,
             memory  => $_[0]->to_kib($_[0]->guest_memory),
             disk_list   => $_[0]->disk_list,
+            cdrom_list  => $_[0]->cdrom_list || [[]],
         );
     },
 );

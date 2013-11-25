@@ -20,19 +20,6 @@ my $bvm = Build::VM->new(
     template_name     => 'server-no-config.tt',
 );
 
-#is_deeply $bvm->host->, "192.168.0.35192.168.0.2192.168.0.40",
-#    "rbd hosts are as expected";
-#is $bvm->guest_xml, get_template_xml(),
-#    "template is generated properly";
-
-# This works... dunno how to test it though
-#my @disk_names = map { [$_, 20] } ( "a" .. "zzz");
-#my $disk_list = $bvm->build_disk_list(\@disk_names);
-#my @expected_names = map { [$_, "vd" . $_ ] } ( "a" .. "zzz" );
-#is_deply $disk_list, \@expected_names, "Disk lists are correct";
-#use Data::Dump;
-#print dd $disk_list;
-
 $bvm->build_disks;
 my $dom = $bvm->deploy_ephemeral;
 
