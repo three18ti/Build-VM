@@ -32,6 +32,11 @@ has rbd_hosts => (
     required    => 1,
 );
 
+has rbd_pool  => (
+    isa         => 'Str',
+    default     => 'libvirt-pool',
+);
+
 has disk_names  => (
     isa     => 'ArrayRef[ArrayRef]',
     lazy    => 1,
@@ -67,6 +72,7 @@ has host        => (
     default     => sub {
         Build::VM::Host->new(
             rbd_hosts_list  => $_[0]->rbd_hosts,
+            rbd_pool        => $_[0]->rbd_pool,
         );
     },
 );
@@ -154,9 +160,14 @@ sub build_disks {
     }
 }
 
-sub deploy_vm {
+sub define_vm {
     my $self = shift;
     my $dom = $self->hvm->vmm->define_domain($self->guest_xml);
+}
+
+sub deploy_vm {
+    my $self = shift;
+    my $dom = $self->define_vm;
     $dom->create;
 }
 

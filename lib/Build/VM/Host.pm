@@ -18,8 +18,6 @@ has 'rbd_hosts_list' => (
     },
 );
 
-
-
 no Moose;
 __PACKAGE__->meta->make_immutable;
 1;

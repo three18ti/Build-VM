@@ -3,6 +3,8 @@ use 5.010;
 use Moose;
 use strict;
 use warnings;
+use Sys::Virt;
+use List::Util qw(first);
 use MooseX::HasDefaults::RO;
 
 has 'hostname'  => (
@@ -31,6 +33,28 @@ has vmm         => (
         );
     },
 );
+
+sub get_dom {
+    my $self = shift;
+    my $guest_name = shift;
+    my $vm_list = $self->vm_list;
+
+    first { $_->get_name eq $guest_name } @$vm_list;
+}
+
+sub guest_exists {
+    my $self = shift;
+    my $guest_name = shift;
+
+    my @dom_list = $self->vmm->list_all_domains;
+    my $matches = grep { $_->get_name eq $guest_name } @dom_list;
+}
+
+sub vm_list {
+    my $self = shift;
+    my @dom_list = $self->vmm->list_all_domains;
+    return \@dom_list;
+}
 
 sub print_vm_list {
     my $self = shift;
