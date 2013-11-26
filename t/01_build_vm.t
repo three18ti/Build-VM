@@ -3,7 +3,7 @@ use 5.010;
 use strict;
 use warnings;
 
-use Test::More tests => 4; 
+use Test::More tests => 5; 
 
 use lib 'lib';
 
@@ -51,9 +51,6 @@ is $bvm2->guest_xml, get_template_cdrom_xml(),
 
 $bvm->build_disks;
 my $dom = $bvm->deploy_ephemeral;
-
-say "Check vm built now";
-system "virsh list";
 
 $bvm->hvm->vm_list;
 
@@ -103,7 +100,7 @@ return<<TEMPLATE_XML
         <host name='192.168.0.40' port='6789'/>
       </source>
       <target dev='vdb' bus='virtio' />
-    </disk>  
+    </disk>
     <interface type='bridge'>
       <source bridge='ovsbr0'/>
       <virtualport type='openvswitch'>
@@ -148,7 +145,8 @@ sub get_template_cdrom_xml {
   <currentMemory unit='KiB'>4194304</currentMemory>
   <vcpu placement='static'>2</vcpu>
   <os>
-    <type arch='x86_64' machine='pc-i440fx-1.4'>hvm</type>
+    <type arch='x86_64' machine='pc-i440fx-1.4'>hvm</type>    
+    <boot dev='cdrom' />
     <boot dev='hd'/>
     <bootmenu enable='no'/>
   </os>

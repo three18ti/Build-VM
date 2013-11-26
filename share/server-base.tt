@@ -7,7 +7,7 @@
     <type arch='[% guest.arch%]' machine='pc-i440fx-1.4'>hvm</type>
     [%- IF guest.cdrom_list.0.0 %]    
     <boot dev='cdrom' />
-    [%- END -%]
+    [%- END %]
     <boot dev='hd'/>
     <bootmenu enable='no'/>
   </os>
