@@ -1,0 +1,7 @@
+base_image_name:                test_build_vm-base
+snap_name:                      2013-11-25
+
+guest_name:                     test_build_vm-base
+
+cdrom_list:                     [[/media/ubuntu-13.10-server-amd64.iso, vdb]]
+disk_names:                     [[test_build_vm-base, 5]]

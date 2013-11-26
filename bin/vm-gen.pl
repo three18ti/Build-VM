@@ -13,6 +13,14 @@ my ($opt, $usage) = describe_options (
 );
 my $command = shift @ARGV;
 
+my $vm_config       = 'etc/new_vm.yml' || shift @ARGV;
+my $default_config  = 'etc/build_vm.yml';
+
+my $defualt         = Config::Any->load_files({ files => [$default_config], use_ext => 1})->[0]->{$default_config};
+my $vm              = Config::Any->load_files({ files => [$vm_config],  use_ext => 1 })->[0]->{$vm_config};
+
+#my $default_config = 
+
 my $base_image_name     = 'ubuntu-server-13.10-x86_64-base';
 my $snap_name           = '2013-11-13';
 my $guest_name          = 'build_vm_bin';

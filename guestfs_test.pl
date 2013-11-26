@@ -70,9 +70,9 @@ $g->close;
 
 $dom->create;
 
-#eval { $dom->destroy };
-#$dom->undefine;
+eval { $dom->destroy };
+$dom->undefine;
 
 #$bvm->remove_disks;
 
-#$bvm->hvm->print_vm_list;
+$bvm->hvm->print_vm_list;
