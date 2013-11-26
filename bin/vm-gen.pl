@@ -3,6 +3,7 @@ use 5.010;
 use strict;
 use warnings;
 
+use Config::Any;
 use lib 'lib';
 use Build::VM;
 
@@ -13,62 +14,60 @@ my ($opt, $usage) = describe_options (
 );
 my $command = shift @ARGV;
 
-my $vm_config       = 'etc/new_vm.yml' || shift @ARGV;
+my $vm_config       = -f 'etc/new_vm.yml' ? 'etc/new_vm.yml' : shift @ARGV;
 my $default_config  = 'etc/build_vm.yml';
 
-my $defualt         = Config::Any->load_files({ files => [$default_config], use_ext => 1})->[0]->{$default_config};
+my $default         = Config::Any->load_files({ files => [$default_config], use_ext => 1})->[0]->{$default_config};
 my $vm              = Config::Any->load_files({ files => [$vm_config],  use_ext => 1 })->[0]->{$vm_config};
 
-#my $default_config = 
-
-my $base_image_name     = 'ubuntu-server-13.10-x86_64-base';
-my $snap_name           = '2013-11-13';
-my $guest_name          = 'build_vm_bin';
-my $guest_memory        = 4096;
-my $storage_disk_size   = 20;
-my $rbd_hosts           = [qw(192.168.0.35 192.168.0.2 192.168.0.40)];
-my $hvm_address         = '192.168.0.35';
-
-my $bvm = Build::VM->new(
-    base_image_name     => $base_image_name,
-    snap_name           => $snap_name,
-    guest_name          => $guest_name,
-    guest_memory        => $guest_memory,
-    storage_disk_size   => $storage_disk_size,
-    rbd_hosts           => $rbd_hosts,
-    hvm_address         => $hvm_address,
-);
+my $bvm = Build::VM->new( { %$default, %$vm });
 
 my $commands = {
     new     => \&new_vm,
-    new_base => \&new_base,
-    list    => \&list_vm
+    list    => \&list_vm,
+    destroy => \&destroy,
+    protect => \&protect,
 };
 
 
 $commands->{$command}->($bvm);
 
-sub new_base_vm {
-    my $b = Build::VM->new(
-        base_image_name     => $base_image_name,
-        snap_name           => $snap_name,
-        guest_name          => $guest_name,
-        guest_memory        => $guest_memory,
-        storage_disk_size   => $storage_disk_size,
-        rbd_hosts           => $rbd_hosts,
-        hvm_address         => $hvm_address,
-    );
-
-    
-
-}
-
 sub new_vm {
     my $bvm = shift;
-    say "new vm called";
+    my $dom;
+    unless ($bvm->hvm->guest_exists($bvm->guest_name)) {
+        $bvm->build_disks;
+        my $dom = $bvm->deploy_ephemeral;
+    }
+    else {
+        say "Vm exists";
+    }
+    $bvm->hvm->print_vm_list;
+}
+
+sub protect {
+    my $bvm = shift;
+#    unless ($bvm->hvm->guest_exists($bvm->guest_name)) {
+#        say "Vm Doesn't exist";
+#    }
+#    else {
+        my $dom = $bvm->hvm->get_dom($bvm->guest_name);
+        eval { $dom->destroy };
+        eval { $dom->undefine };
+#        $bvm->rbd->snap_create;
+        $bvm->rbd->snap_protect;
+#    }
 }
 
 sub list_vm {
     my $bvm = shift;
     $bvm->hvm->print_vm_list;
+}
+
+sub destroy {
+    my $bvm = shift;
+    my $dom = $bvm->hvm->get_dom($bvm->guest_name);
+    eval { $dom->destroy };
+    eval { $dom->undefine };
+    $bvm->remove_disks;
 }
