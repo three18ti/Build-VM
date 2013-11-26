@@ -1,0 +1,4 @@
+guest_name:                     test_build_vm-base
+
+disk_names:                     [[test_build_vm-base, null], [test_build_vm-base-storage1, 20], [test_build_vm-base-storage2, 20]]
+
