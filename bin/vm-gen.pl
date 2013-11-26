@@ -14,7 +14,7 @@ my ($opt, $usage) = describe_options (
 );
 my $command = shift @ARGV;
 
-my $vm_config       = -f 'etc/new_vm.yml' ? 'etc/new_vm.yml' : shift @ARGV;
+my $vm_config       = shift @ARGV || 'etc/new_vm.yml';
 my $default_config  = 'etc/build_vm.yml';
 
 my $default         = Config::Any->load_files({ files => [$default_config], use_ext => 1})->[0]->{$default_config};
@@ -27,6 +27,7 @@ my $commands = {
     list    => \&list_vm,
     destroy => \&destroy,
     protect => \&protect,
+    deploy => \&deploy,
 };
 
 
@@ -43,6 +44,19 @@ sub new_vm {
         say "Vm exists";
     }
     $bvm->hvm->print_vm_list;
+}
+
+sub deploy {
+    my $bvm = shift;
+    my $dom;
+    unless ($bvm->hvm->guest_exists($bvm->guest_name)) {
+        $bvm->build_disks;
+        my $dom = $bvm->deploy_vm;
+    }
+    else {
+        say "Vm exists";
+    }
+
 }
 
 sub protect {

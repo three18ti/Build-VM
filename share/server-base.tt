@@ -39,7 +39,7 @@
       <driver name='qemu' type='raw'/>
       <source file='[%- cdrom.0 -%]'/>
       <readonly/>
-      <target dev='[%- cdrom.1 -%]' bus='virtio' />
+      <target dev='[%- cdrom.1 -%]' bus='ide' />
     </disk>
     [%- END %]  
     [%- END -%]
