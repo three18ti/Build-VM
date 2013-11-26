@@ -143,7 +143,6 @@ sub build_template {
     return $xml;
 }
 
-# This can only handle 704 disks...
 sub build_disk_list {
     my $self = shift;
     my $disk_names = shift;
