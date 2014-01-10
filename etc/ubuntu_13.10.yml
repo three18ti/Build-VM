@@ -1,5 +1,5 @@
-ase_image_name:                ubuntu-13.10-server-amd64
-snap_name:                      2013-11-25
+ase_image_name:                 ubuntu-13.10-server-amd64
+snap_name:                      2013-12-09
 
 guest_name:                     ubuntu-13.10
 

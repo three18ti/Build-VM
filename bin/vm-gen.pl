@@ -28,6 +28,7 @@ my $commands = {
     destroy => \&destroy,
     protect => \&protect,
     deploy => \&deploy,
+    dumpxml => \&dump_xml,
 };
 
 
@@ -66,9 +67,9 @@ sub protect {
 #    }
 #    else {
         my $dom = $bvm->hvm->get_dom($bvm->guest_name);
-        eval { $dom->destroy };
-        eval { $dom->undefine };
-#        $bvm->rbd->snap_create;
+#        eval { $dom->destroy };
+#        eval { $dom->undefine };
+        $bvm->rbd->snap_create;
         $bvm->rbd->snap_protect;
 #    }
 }
@@ -84,4 +85,9 @@ sub destroy {
     eval { $dom->destroy };
     eval { $dom->undefine };
     $bvm->remove_disks;
+}
+
+sub dump_xml {
+    my $bvm = shift;
+    say $bvm->guest_xml;
 }
