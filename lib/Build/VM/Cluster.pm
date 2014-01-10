@@ -10,11 +10,14 @@ use MooseX::HasDefaults::RO;
 
 use Build::VM::Hypervisor;
 
-
 has 'hvm_address_list' => (
     traits      => ['Array'],
     isa         => 'ArrayRef',
     required    => 1,
+    handles     => {
+        'count_hvm'     => 'count',
+        'hvm_elements'  => 'elements',
+    },
 );
 
 has 'rbd_pool'  => (
@@ -44,16 +47,16 @@ sub _build_hvm_list {
 
     my $hvm_list;
     # test if arrayref or single address, set the one 
-    if ($self->hvm_address_list->count == 1) {
+    if ($self->count_hvm == 1) {
         push @{$hvm_list}, Build::VM::Hypervisor->new ( 
             # This is dumb... already an arrayref
             #address =>  [$self->hvm_address->shift],
-            address => $self->hvm_address,
+            address => $self->hvm_address_list->[0],
         );
     }
     # iterate through the list of hvms
     else {
-        foreach my $element ($self->hvm_address_list->elements) {
+        foreach my $element ($self->hvm_elements) {
             # if array should be ['hostname', 'address'] # could test for name/address...
             if ( ref $element eq 'ARRAY' ) {
                 push @{$hvm_list}, Build::VM::Hypervisor->new ( 
