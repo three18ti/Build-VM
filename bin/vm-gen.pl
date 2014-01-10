@@ -22,6 +22,7 @@ my $vm              = Config::Any->load_files({ files => [$vm_config],  use_ext 
 
 my $bvm = Build::VM->new( { %$default, %$vm });
 
+# What's the difference between new and deploy?
 my $commands = {
     new     => \&new_vm,
     list    => \&list_vm,
