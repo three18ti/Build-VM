@@ -1,0 +1,6 @@
+base_image_name:                fedora-19-x86_64
+snap_name:                      2013-12-2
+
+guest_name:                     fedora_disk_test
+
+disk_names:                     [[fedora_disk_test-os, null], [fedora_disk_test-storage0, 5], [fedora_disk_test-storage1, 5], [fedora_disk_test-storage2, 5], [fedora_disk_test-storage3, 5], [fedora_disk_test-storage4, 5], [fedora_disk_test-storage5, 5], [fedora_disk_test-storage6, 5]]

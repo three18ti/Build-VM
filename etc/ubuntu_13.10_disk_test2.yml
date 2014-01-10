@@ -1,0 +1,6 @@
+ase_image_name:                 ubuntu-13.10-server-amd64
+snap_name:                      2013-11-25
+
+guest_name:                     ubuntu_13.10_disk_test2
+
+disk_names:                     [[ubuntu_13.10_disk_test2-os, null], [ubuntu_13.10_disk_test2-storage0, 5], [ubuntu_13.10_disk_test2-storage1, 5], [ubuntu_13.10_disk_test2-storage2, 5], [ubuntu_13.10_disk_test2-storage3, 5], [ubuntu_13.10_disk_test2-storage4, 5], [ubuntu_13.10_disk_test2-storage5, 5]]

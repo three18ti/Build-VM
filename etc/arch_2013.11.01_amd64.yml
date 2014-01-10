@@ -1,0 +1,7 @@
+base_image_name:                archlinux-2013.11.01
+snap_name:                      2013-12-2
+
+guest_name:                     arch_2013
+
+cdrom_list:                     [[/media/archlinux-2013.11.01-dual.iso, hda]]
+disk_names:                     [[archlinux-2013.11.01, 5]]

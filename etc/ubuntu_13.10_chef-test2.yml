@@ -1,0 +1,4 @@
+base_image_name:                ubuntu-server-13.10-x86_64-base
+snap_name:                      2013-11-25
+
+guest_name:                     chef-test2

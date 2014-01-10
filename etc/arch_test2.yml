@@ -1,0 +1,6 @@
+base_image_name:                archlinux-2013.11.01
+snap_name:                      2013-12-2
+
+guest_name:                     arch_test
+
+disk_names:                     [[arch_test-os, null]]
