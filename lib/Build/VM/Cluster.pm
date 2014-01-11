@@ -94,27 +94,14 @@ sub select_hvm {
     my @search_hvm  = (shift, shift);
     
     # Hopefully we'll find hvm, otherwise undef
-    my $hvm;
-    # accept hostname and name, don't know why you'd want to use (HOST)*NAME but accept that too
-    # suggest invoking:
-    # my $hvm = $cluster->select_hvm( hostname => 'foobar');
-    # ok, it's easy, support just hvm name:
-    # my $hvm = $cluster->select_hvm( 'some_hostname' );
-    if ($search_hvm[0] =~ /(host)*name/i or !is_ipv4 $search_hvm[0]) {
-        $hvm = $self->find_hvm( 
-            sub { 
-                my $hvm_name = @search_hvm == 1 ? shift @search_hvm : pop @search_hvm;
-                $_->hostname eq $hvm_name if $hvm_name;
-            }
-        );
-    }
-    # otherwise search by ip.  For some reason I don't think that you'd just call 
+    my $hvm;    
+    # Actually, search first by ip.  For some reason I don't think that you'd just call 
     # $cluster->select_hvm( $hostname ); because...
     # accept:
     # my $hvm = $cluster->select_hvm( ip => '192.168.1.10');
     # my $hvm = $cluster->select_hvm( address => '192.168.1.10');
     # my $hvm = $cluster->select_hvm( '192.168.1.10');
-    elsif ($search_hvm[0] =~ /(ip|address)/i or is_ipv4 $search_hvm[0]) {
+    if ($search_hvm[0] =~ /(ip|address)/i or is_ipv4 $search_hvm[0]) {
         $hvm = $self->find_hvm(
             sub {
                 my $search_address = @search_hvm == 1 ? shift @search_hvm : pop @search_hvm;
@@ -122,6 +109,20 @@ sub select_hvm {
             }
         );
     }
+    # accept hostname and name, don't know why you'd want to use (HOST)*NAME but accept that too
+    # suggest invoking:
+    # my $hvm = $cluster->select_hvm( hostname => 'foobar');
+    # ok, it's easy, support just hvm name:
+    # my $hvm = $cluster->select_hvm( 'some_hostname' );
+    elsif ($search_hvm[0] =~ /(host)*name/i or !is_ipv4 $search_hvm[0]) {
+        $hvm = $self->find_hvm( 
+            sub { 
+                my $hvm_name = @search_hvm == 1 ? shift @search_hvm : pop @search_hvm;
+                $_->hostname eq $hvm_name if $hvm_name;
+            }
+        );
+    }
+
 #    elsif (
 }
 
