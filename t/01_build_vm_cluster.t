@@ -43,6 +43,7 @@ my $hvm_searches = [
     ['192.168.15.2'],
 ];
 
+#my @hvms    = map { $clusters->[1]->select_hvm( @$_ ) } @$hvm_searches;
 my @hvms    = map { $clusters->[1]->select_hvm( @$_ ) } @$hvm_searches;
 #dd $hvm;
 
