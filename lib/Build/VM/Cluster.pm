@@ -123,7 +123,6 @@ sub select_hvm {
         $hvm = $self->find_hvm( 
             sub { 
                 print "\@search_hvm: ";
-                dd @search_hvm;
                 my $hvm_name = @search_hvm == 1 ? $search_hvm[0] : $search_hvm[1];
                 $_->hostname eq $hvm_name if $_->hostname;
             }
