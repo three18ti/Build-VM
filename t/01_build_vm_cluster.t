@@ -2,7 +2,7 @@
 use 5.010;
 use strict;
 use warnings;
-
+use diagnostics;
 use Test::More;
 use Test::Output;
 
@@ -46,7 +46,10 @@ my $hvm_searches = [
 ];
 
 #my @hvms    = map { $clusters->[1]->select_hvm( @$_ ) } @$hvm_searches;
-my @hvms    = map { $clusters->[1]->select_hvm( @$_ ) } @$hvm_searches;
+my @hvms    = map { 
+    dd $_;
+    $clusters->[1]->select_hvm( @$_ );
+} @$hvm_searches;
 
 dd \@hvms;
 
