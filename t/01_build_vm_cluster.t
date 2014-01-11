@@ -36,25 +36,25 @@ map { map { $_->uri } $_->list_hvm } @$clusters;
 
 #dd $clusters;
 
-#my $hvm_searches = [
-#    [hostname   => 'shepard'],
-#    [name       => 'kitt'],
-#    [ip         => '192.168.15.35'],
-#    [address    => '192.168.15.40'],
-#    ['kitt'],
-#    ['192.168.15.2'],
-#];
+my $hvm_searches = [
+    [hostname   => 'shepard'],
+    [name       => 'kitt'],
+    [ip         => '192.168.15.35'],
+    [address    => '192.168.15.40'],
+    ['kitt'],
+    ['192.168.15.2'],
+];
 
-#my @hvms    = map { $clusters->[1]->select_hvm( @$_ ) } @$hvm_searches;
+my @hvms    = map { $clusters->[1]->select_hvm( @$_ ) } @$hvm_searches;
 #my @hvms    = map { 
 #    dd $_;
 #    $clusters->[1]->select_hvm( @$_ );
 #} @$hvm_searches;
 
-#dd \@hvms;
+dd \@hvms;
 
-my $hvm = $clusters->[1]->select_hvm( 'hostname' => 'shepard' );
+#my $hvm = $clusters->[1]->select_hvm( 'hostname' => 'shepard' );
 
-dd $hvm;
+#dd $hvm;
 
 done_testing;
