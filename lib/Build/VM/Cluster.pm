@@ -67,7 +67,7 @@ sub _build_hvm_list {
             # if array should be ['hostname', 'address'] # could test for name/address...
             if ( ref $element eq 'ARRAY' ) {
                 push @{$hvm_list}, Build::VM::Hypervisor->new ( 
-                    hostname    => $element->[0].
+                    hostname    => $element->[0],
                     address     => $element->[1], 
                 );
             }
