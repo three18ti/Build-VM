@@ -122,6 +122,7 @@ sub select_hvm {
     elsif ($search_hvm[0] =~ /(host)*name/i or !is_ipv4 $search_hvm[0]) {
         $hvm = $self->find_hvm( 
             sub { 
+                print "\@search_hvm: ";
                 dd @search_hvm;
                 my $hvm_name = @search_hvm == 2 ? shift @search_hvm : pop @search_hvm;
                 $_->hostname eq $hvm_name if $hvm_name;
