@@ -10,6 +10,8 @@ use MooseX::HasDefaults::RO;
 
 use Build::VM::Hypervisor;
 
+use Data::Dump;
+
 has 'hvm_address_list' => (
     isa         => 'ArrayRef',
     traits      => ['Array'],
@@ -65,8 +67,8 @@ sub _build_hvm_list {
             # if array should be ['hostname', 'address'] # could test for name/address...
             if ( ref $element eq 'ARRAY' ) {
                 push @{$hvm_list}, Build::VM::Hypervisor->new ( 
-                    hostname    => shift @{$element},
-                    address     => shift @{$element},, 
+                    hostname    => $element->[0].
+                    address     => $element->[1], 
                 );
             }
             # hashref of elements, 
@@ -90,8 +92,11 @@ sub _build_hvm_list {
 }
 
 sub select_hvm {
+    say "\@_ in select_hvm";
+    dd @_;
+
     my $self        = shift;
-    my @search_hvm  = (shift, shift);
+    my @search_hvm  = @_;
     
     # Hopefully we'll find hvm, otherwise undef
     my $hvm;    
@@ -104,8 +109,8 @@ sub select_hvm {
     if ($search_hvm[0] =~ /(ip|address)/i or is_ipv4 $search_hvm[0]) {
         $hvm = $self->find_hvm(
             sub {
-                my $search_address = @search_hvm == 1 ? pop @search_hvm : shift @search_hvm;
-                $_->address eq $search_address;
+                my $search_address = @search_hvm == 2 ? shift @search_hvm : pop @search_hvm;
+                $_->address eq $search_address if $search_address;
             }
         );
     }
@@ -117,7 +122,7 @@ sub select_hvm {
     elsif ($search_hvm[0] =~ /(host)*name/i or !is_ipv4 $search_hvm[0]) {
         $hvm = $self->find_hvm( 
             sub { 
-                my $hvm_name = @search_hvm == 1 ? pop @search_hvm : shift @search_hvm;
+                my $hvm_name = @search_hvm == 2 ? shift @search_hvm : pop @search_hvm;
                 $_->hostname eq $hvm_name if $hvm_name;
             }
         );

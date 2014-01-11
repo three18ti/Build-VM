@@ -2,7 +2,7 @@
 use 5.010;
 use strict;
 use warnings;
-use diagnostics;
+
 use Test::More;
 use Test::Output;
 
@@ -34,7 +34,7 @@ push @{$clusters}, Build::VM::Cluster->new(
 #map { map { $_->vmm } $_->list_hvm } @$clusters;
 map { map { $_->uri } $_->list_hvm } @$clusters;
 
-dd $clusters;
+#dd $clusters;
 
 my $hvm_searches = [
     [hostname   => 'shepard'],
@@ -47,10 +47,10 @@ my $hvm_searches = [
 
 #my @hvms    = map { $clusters->[1]->select_hvm( @$_ ) } @$hvm_searches;
 my @hvms    = map { 
-    dd $_;
+#    dd $_;
     $clusters->[1]->select_hvm( @$_ );
 } @$hvm_searches;
 
-dd \@hvms;
+#dd \@hvms;
 
 done_testing;
