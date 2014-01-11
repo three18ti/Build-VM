@@ -104,7 +104,7 @@ sub select_hvm {
     if ($search_hvm[0] =~ /(ip|address)/i or is_ipv4 $search_hvm[0]) {
         $hvm = $self->find_hvm(
             sub {
-                my $search_address = @search_hvm == 1 ? shift @search_hvm : pop @search_hvm;
+                my $search_address = @search_hvm == 1 ? pop @search_hvm : shift @search_hvm;
                 $_->address eq $search_address;
             }
         );
@@ -117,7 +117,7 @@ sub select_hvm {
     elsif ($search_hvm[0] =~ /(host)*name/i or !is_ipv4 $search_hvm[0]) {
         $hvm = $self->find_hvm( 
             sub { 
-                my $hvm_name = @search_hvm == 1 ? shift @search_hvm : pop @search_hvm;
+                my $hvm_name = @search_hvm == 1 ? pop @search_hvm : shift @search_hvm;
                 $_->hostname eq $hvm_name if $hvm_name;
             }
         );
