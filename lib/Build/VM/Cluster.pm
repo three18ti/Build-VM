@@ -41,6 +41,7 @@ has '_hvm_list' => (
     builder     => '_build_hvm_list',
     handles     => {
         list_hvm    => 'elements',
+        find_hvm    => 'first',
     },
 );
 
@@ -86,6 +87,24 @@ sub _build_hvm_list {
         }
     }
     return $hvm_list;
+}
+
+sub select_hvm {
+    my $self        = shift;
+    my @search_hvm  = (shift, shift);
+    
+    my $hvm;
+    if ($search_hvm[0] =~ /(host)*name/i) {
+        $hvm = $self->find_hvm( 
+            sub { 
+                $_->hostname eq $search_hvm[1]
+            }
+        );
+    }
+    elsif ($search_hvm[0] =~ /(ip|address)/i) {
+
+    }
+#    elsif (
 }
 
 no Moose;
