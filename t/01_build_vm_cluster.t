@@ -30,10 +30,8 @@ push @{$clusters}, Build::VM::Cluster->new(
     ],
 );
 
-map { $_->_hvm_list } @$clusters;
+map { map { $_->vmm } $_->list_hvm } @$clusters;
 
 dd $clusters;
 
-
 done_testing;
-

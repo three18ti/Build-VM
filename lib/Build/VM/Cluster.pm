@@ -11,8 +11,8 @@ use MooseX::HasDefaults::RO;
 use Build::VM::Hypervisor;
 
 has 'hvm_address_list' => (
-    traits      => ['Array'],
     isa         => 'ArrayRef',
+    traits      => ['Array'],
     required    => 1,
     handles     => {
         'count_hvm'     => 'count',
@@ -21,23 +21,27 @@ has 'hvm_address_list' => (
 );
 
 has 'rbd_pool'  => (
-    isa     => 'Str',
-    default => 'libvirt-pool',
+    isa         => 'Str',
+    default     => 'libvirt-pool',
 );
 
 has 'rbd_hosts_list' => (
-    isa     => 'ArrayRef[Str]',
-    required => 1,
-    traits => ['Array'],
-    handles => {
+    isa         => 'ArrayRef[Str]',
+    traits      => ['Array'],
+    required    => 1,
+    handles     => {
         rbd_hosts => 'elements',
     },
 );
 
 has '_hvm_list' => (
-    isa     => 'ArrayRef[Build::VM::Hypervisor]',
-    lazy    => 1,
-    builder => '_build_hvm_list',
+    isa         => 'ArrayRef[Build::VM::Hypervisor]',
+    lazy        => 1,
+    traits      => ['Array'],
+    builder     => '_build_hvm_list',
+    handles     => {
+        list_hvm    => 'elements',
+    },
 );
 
 sub _build_hvm_list {
