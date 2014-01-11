@@ -93,16 +93,31 @@ sub select_hvm {
     my $self        = shift;
     my @search_hvm  = (shift, shift);
     
+    # Hopefully we'll find hvm, otherwise undef
     my $hvm;
+    # accept hostname and name, don't know why you'd want to use (HOST)*NAME but accept that too
+    # suggest invoking:
+    # my $hvm =  $cluster->select_hvm( hostname => 'foobar');
     if ($search_hvm[0] =~ /(host)*name/i) {
         $hvm = $self->find_hvm( 
             sub { 
-                $_->hostname eq $search_hvm[1]
+                $_->hostname eq $search_hvm[1] if $search_hvm[1]
             }
         );
     }
-    elsif ($search_hvm[0] =~ /(ip|address)/i) {
-
+    # otherwise search by ip.  For some reason I don't think that you'd just call 
+    # $cluster->select_hvm( $hostname ); because...
+    # accept:
+    # my $hvm = $cluster->select_hvm( ip => '192.168.1.10');
+    # my $hvm = $cluster->select_hvm( address => '192.168.1.10');
+    # my $hvm = $cluster->select_hvm( '192.168.1.10');
+    elsif ($search_hvm[0] =~ /(ip|address)/i or @search_hvm == 1) {
+        $hvm = $self->find_hvm(
+            sub {
+                my $search_address = @search_hvm == 1 ? shift @search_hvm : pop @search_hvm;
+                $_->address eq $search_address;
+            }
+        );
     }
 #    elsif (
 }
