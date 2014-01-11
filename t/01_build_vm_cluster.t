@@ -30,7 +30,9 @@ push @{$clusters}, Build::VM::Cluster->new(
     ],
 );
 
-map { map { $_->vmm } $_->list_hvm } @$clusters;
+# ha commented out the right one for debugging... well.. now I think about it
+#map { map { $_->vmm } $_->list_hvm } @$clusters;
+map { map { $_->uri } $_->list_hvm } @$clusters;
 
 dd $clusters;
 
@@ -45,8 +47,7 @@ my $hvm_searches = [
 
 #my @hvms    = map { $clusters->[1]->select_hvm( @$_ ) } @$hvm_searches;
 my @hvms    = map { $clusters->[1]->select_hvm( @$_ ) } @$hvm_searches;
-#dd $hvm;
 
-dd @hvms;
+dd \@hvms;
 
 done_testing;
