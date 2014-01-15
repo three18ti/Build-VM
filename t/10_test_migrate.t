@@ -31,14 +31,17 @@ my $bvm = new_ok 'Build::VM' => [
 #$bvm->build_disks;# unless $bvm->guest_exists($bvm->guest_name);
 #$bvm->deploy_ephemeral;# unless $bvm->guest_exists($bvm->guest_name);
 
+#say $bvm->isa('Build::VM');
+#say ref $bvm;
+
 #my $dom = $bvm->get_dom($bvm->guest_name);
 my $dom = $bvm->find_dom($bvm->guest_name);
 
-dd $dom;
+#dd $dom;
 
 $bvm->select_hvm('192.168.15.2')->print_vm_list;
 
-my $ddom = $dom->migrate( $bvm->select_hvm('192.168.15.2')->vmm, Sys::Virt::Domain::MIGRATE_LIVE);
+my $ddom = $dom->migrate( $bvm->select_hvm('192.168.15.35')->vmm, Sys::Virt::Domain::MIGRATE_LIVE);
 
 $bvm->select_hvm('192.168.15.2')->print_vm_list;
 

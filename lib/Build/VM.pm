@@ -13,7 +13,7 @@ use Ceph::RBD::CLI;
 use Build::VM::Host;
 use Build::VM::Guest;
 use Build::VM::Cluster;
-use Build::VM::Hypervisor;
+#use Build::VM::Hypervisor;
 use MooseX::HasDefaults::RO;
 use File::ShareDir 'dist_dir';
 use List::MoreUtils qw( each_array );

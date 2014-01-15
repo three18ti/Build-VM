@@ -182,6 +182,7 @@ sub find_dom {
     my $self        = shift;
     my $guest_name  = shift;
 
+    # There's probably a better way to do this...
     my $hvm = first { 
         $_->get_dom($guest_name);
     } $self->list_hvm;
