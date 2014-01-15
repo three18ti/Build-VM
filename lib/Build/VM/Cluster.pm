@@ -17,7 +17,7 @@ has 'hvm_address_list' => (
     traits      => ['Array'],
     required    => 1,
     handles     => {
-        'count_hvm'     => 'count',
+        'hvm_address_count' => 'count',
         'hvm_elements'  => 'elements',
     },
 );
@@ -30,7 +30,7 @@ has 'rbd_pool'  => (
 has 'rbd_hosts_list' => (
     isa         => 'ArrayRef[Str]',
     traits      => ['Array'],
-    required    => 1,
+#    required    => 1,
     handles     => {
         rbd_hosts => 'elements',
     },
@@ -44,6 +44,7 @@ has '_hvm_list' => (
     handles     => {
         list_hvm    => 'elements',
         find_hvm    => 'first',
+        count_hvm   => 'count',
     },
 );
 
@@ -54,7 +55,7 @@ sub _build_hvm_list {
 
     my $hvm_list;
     # test if arrayref or single address, set the one 
-    if ($self->count_hvm == 1) {
+    if ($self->hvm_address_count == 1) {
         push @{$hvm_list}, Build::VM::Hypervisor->new ( 
             # This is dumb... already an arrayref
             #address =>  [$self->hvm_address->shift],

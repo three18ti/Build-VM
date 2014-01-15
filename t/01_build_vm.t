@@ -18,6 +18,12 @@ my $bvm = new_ok 'Build::VM' => [
     'guest_memory'      => 4096,
     'storage_disk_size' => 20,
     'rbd_hosts'         => [qw(192.168.0.35 192.168.0.2 192.168.0.40)],
+    'hvm_address_list'  => [
+        [kitt       => '192.168.15.35'], 
+        [shepard    => '192.168.15.2'], 
+        [red6       => '192.168.15.40'],
+    ],
+    'hvm_target'        => [hostname    => 'kitt'],
     'hvm_address'       => $hvm_address,
     'template_name'     => 'server-base.tt',
 ];
@@ -29,6 +35,12 @@ my $bvm2 = new_ok 'Build::VM' => [
     'storage_disk_size' => 20,
     'rbd_hosts'         => [qw(192.168.0.35 192.168.0.2 192.168.0.40)],
     'cdrom_list'        => [[ '/media/ubuntu-13.10-server-amd64.iso', 'vdb'],],
+    'hvm_address_list'  => [
+        [kitt       => '192.168.15.35'], 
+        [shepard    => '192.168.15.2'], 
+        [red6       => '192.168.15.40'],
+    ],
+    'hvm_target'        => [address     => $hvm_address],
     'hvm_address'       => $hvm_address,
     'template_name'     => 'server-base.tt',
 ];
@@ -49,7 +61,7 @@ is $bvm2->guest_xml, get_template_cdrom_xml(),
 #use Data::Dump;
 #print dd $disk_list;
 
-$bvm->build_disks;
+#$bvm->build_disks;
 my $dom = $bvm->deploy_ephemeral;
 
 $bvm->hvm->vm_list;

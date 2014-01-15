@@ -12,14 +12,23 @@ use Sys::Guestfs;
 use Ceph::RBD::CLI;
 use Build::VM::Host;
 use Build::VM::Guest;
-use Build::VM::Hypervisor;
+use Build::VM::Cluster;
 use MooseX::HasDefaults::RO;
 use File::ShareDir 'dist_dir';
 use List::MoreUtils qw( each_array );
 
-has [qw ( base_image_name snap_name guest_name hvm_address) ]  => (
+has [qw ( base_image_name snap_name guest_name ) ]  => (
     isa         => 'Str',
-    required    => 1
+    required    => 1,
+);
+
+has hvm_target  => (
+    required    => 1,
+);
+
+has hvm_address_list    => (
+    isa         => 'ArrayRef',
+    required    =>  1,
 );
 
 has [qw(guest_memory storage_disk_size)] => (
@@ -98,13 +107,27 @@ has rbd         => (
     },
 );
 
+has hvm_cluster => (
+    isa         => 'Build::VM::Cluster',
+    lazy        => 1,
+    default     => sub {
+        Build::VM::Cluster->new(
+            hvm_address_list    => $_[0]->hvm_address_list,
+            rbd_hosts_list      => $_[0]->rbd_hosts,
+        );
+    },
+    handles     => {
+        select_hvm  => 'select_hvm',
+        count_hvm   => 'count_hvm',
+    }
+    
+);
+
 has hvm         => (
     isa         => 'Build::VM::Hypervisor',
     lazy        => 1,
     default     => sub {
-        Build::VM::Hypervisor->new(
-            address => $_[0]->hvm_address
-        );
+        $_[0]->select_hvm($_[0]->hvm_target)
     }
 );
 
