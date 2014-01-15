@@ -51,10 +51,17 @@ my @hvms    = map { $clusters->[1]->select_hvm( @$_ ) } @$hvm_searches;
 #    $clusters->[1]->select_hvm( @$_ );
 #} @$hvm_searches;
 
-dd \@hvms;
+#dd \@hvms;
+#use Data::Dumper;
+#print Dumper \@hvms;
+
+my @hvms2   = map { $clusters->[1]->select_hvm( $_ ) } @$hvm_searches;
+dd \@hvms2;
 
 #my $hvm = $clusters->[1]->select_hvm( 'hostname' => 'shepard' );
 
 #dd $hvm;
+
+#map { $_->print_all_vm_list } @$clusters;
 
 done_testing;

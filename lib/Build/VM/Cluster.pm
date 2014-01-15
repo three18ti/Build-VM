@@ -11,6 +11,7 @@ use MooseX::HasDefaults::RO;
 use Build::VM::Hypervisor;
 
 use Data::Dump;
+use Data::Dumper;
 
 has 'hvm_address_list' => (
     isa         => 'ArrayRef',
@@ -94,8 +95,24 @@ sub _build_hvm_list {
 
 sub select_hvm {
     my $self        = shift;
-    my @search_hvm  = @_;
-    
+
+    my @search_hvm;
+    if (ref $_[0] eq 'ARRAY' ) {
+        my $hvm = shift @_;
+        say Dumper $hvm;
+        @search_hvm = @{$hvm};
+        # wtf... this is the same thing but doesn't work
+        # @search_hvm = @{$_[0]};
+    }
+    # untested
+    elsif ( ref $_[0] eq 'HASH' ) {
+        push @search_hvm, $_[0]->{hostname};
+        push @search_hvm, $_[0]->{address};
+    }
+    else {
+        @search_hvm = @_;
+    }
+
     # Hopefully we'll find hvm, otherwise undef
     my $hvm;    
     # Actually, search first by ip.  For some reason I don't think that you'd just call 
@@ -127,6 +144,37 @@ sub select_hvm {
     }
 
 #    elsif (
+}
+
+sub print_hvm_list {
+    my $self = shift;
+    
+    foreach my $hvm ( $self->list_hvm ) {
+#        if 
+    }    
+
+#    say sprintf "   ID:  | Name:                                     | State:    | Persistence:";
+#    say sprintf "--------|-------------------------------------------|-----------|-------------";
+#    foreach my $dom (@dom_list) {
+#        say sprintf "  % 4s  | % -40s  | % -8s  | % -10s",
+#            $dom->get_id == '-1' ? "off" : $dom->get_id,
+#                $dom->get_name,
+#                $dom->is_active ? "active" : "inactive",
+#                $dom->is_persistent ? "persistent" : "ephemeral";
+#    }
+
+
+}
+
+# Print vms on all the hypervisors
+sub print_all_vm_list {
+    my $self = shift;
+
+    foreach my $hvm ( $self->list_hvm ) {
+        my $hvm_id = $hvm->hostname ? $hvm->hostname : $hvm->address;
+        say sprintf "HVM ID: | % -40s ", $hvm_id;
+        $hvm->print_vm_list;
+    }
 }
 
 no Moose;
