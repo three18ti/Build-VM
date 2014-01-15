@@ -93,9 +93,6 @@ sub _build_hvm_list {
 
 sub select_hvm {
     my $self        = shift;
-
-    say "What's left of \@_ in select_hvm";
-    dd @_;
     my @search_hvm  = @_;
     
     # Hopefully we'll find hvm, otherwise undef

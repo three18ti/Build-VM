@@ -15,5 +15,6 @@ TODO:
     - make module "cluster aware"
         - will need to impliment some sort of way to chose host/handle single host "clusters"
         - migrate vms uisng tool
+        - handle situation where single hvm in cluster is unreachable
     - tool to manage vm-migration 
     - able to deploy to different ceph pools (matter of how I'm calling rbd?)
