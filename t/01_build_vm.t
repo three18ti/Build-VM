@@ -63,34 +63,38 @@ is $bvm2->guest_xml, get_template_cdrom_xml(),
 #use Data::Dump;
 #print dd $disk_list;
 
-$bvm2->build_disks;
-#my $dom = $bvm->deploy_ephemeral;
-my $dom = $bvm2->deploy_ephemeral;
+$bvm->build_disks;
+my $dom = $bvm->deploy_ephemeral;
+#my $dom = $bvm2->deploy_ephemeral;
 
-$bvm2->select_hvm('192.168.15.35')->print_vm_list;
-$bvm2->select_hvm('192.168.15.2')->print_vm_list;
+$bvm->select_hvm('192.168.15.35')->print_vm_list;
+$bvm->select_hvm('192.168.15.2')->print_vm_list;
 
 say "Migrating VM";
 say "#" x 25;
 
-#my $ddom = $dom->migrate($bvm2->select_hvm('192.168.15.2')->vmm, Sys::Virt::Domain::MIGRATE_LIVE);
+my $ddom = $dom->migrate($bvm2->select_hvm('192.168.15.2')->vmm, 
+Sys::Virt::Domain::MIGRATE_LIVE);
 
-$bvm2->select_hvm('192.168.15.2')->print_vm_list;
+$bvm->select_hvm('192.168.15.2')->print_vm_list;
 
 
 #$_->print_vm_list foreach $bvm->hvm_cluster->list_hvm;
 
-dd $bvm2->hvm_target;
-#$bvm2->hvm->vm_list;
+#dd $bvm2->hvm_target;
+$bvm->hvm->vm_list;
 
 # print all the vms in all the hvms
 #$_->print_vm_list foreach $bvm->list_hvm;
 
-$dom->destroy;
-#$ddom->destroy;
+dd $dom;
+dd $ddom;
+
+eval { $dom->destroy };
+$ddom->destroy;
 #$dom->undefine;
 
-$bvm2->remove_disks;
+$bvm->remove_disks;
 
 
 done_testing;

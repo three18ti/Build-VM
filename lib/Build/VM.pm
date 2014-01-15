@@ -120,6 +120,7 @@ has hvm_cluster => (
     handles     => {
         select_hvm  => 'select_hvm',
         count_hvm   => 'count_hvm',
+        find_dom    => 'find_dom',
     }
     
 );
@@ -129,6 +130,9 @@ has hvm         => (
     lazy        => 1,
     default     => sub {
         $_[0]->select_hvm($_[0]->hvm_target)
+    },
+    handles     => {
+        get_dom     => 'get_dom',
     }
 );
 

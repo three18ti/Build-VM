@@ -6,6 +6,7 @@ use Moose;
 use strict;
 use warnings;
 use Data::Validate::IP;
+use List::Util qw(first);
 use MooseX::HasDefaults::RO;
 
 use Build::VM::Hypervisor;
@@ -175,6 +176,17 @@ sub print_all_vm_list {
         say sprintf "HVM ID: | % -40s ", $hvm_id;
         $hvm->print_vm_list;
     }
+}
+
+sub find_dom {
+    my $self        = shift;
+    my $guest_name  = shift;
+
+    my $hvm = first { 
+        $_->get_dom($guest_name);
+    } $self->list_hvm;
+
+    $hvm->get_dom($guest_name);
 }
 
 no Moose;
