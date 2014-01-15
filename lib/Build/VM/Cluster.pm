@@ -190,8 +190,16 @@ sub find_dom {
     $hvm->get_dom($guest_name);
 }
 
+sub guest_exists {
+    my $self        = shift;
+    my $guest_name  = shift;
+
+    $self->find_dom($guest_name)
+        ? 1
+        : 0;
+}
+
 no Moose;
 __PACKAGE__->meta->make_immutable;
 1;
 __END__
-

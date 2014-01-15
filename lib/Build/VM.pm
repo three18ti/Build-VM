@@ -118,9 +118,10 @@ has hvm_cluster => (
         );
     },
     handles     => {
-        select_hvm  => 'select_hvm',
-        count_hvm   => 'count_hvm',
-        find_dom    => 'find_dom',
+        guest_exists    => 'guest_exists',
+        select_hvm      => 'select_hvm',
+        count_hvm       => 'count_hvm',
+        find_dom        => 'find_dom',
     }
     
 );

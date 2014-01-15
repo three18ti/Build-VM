@@ -28,8 +28,8 @@ my $bvm = new_ok 'Build::VM' => [
     'template_name'     => 'server-base.tt',
 ];
 
-#$bvm->build_disks;# unless $bvm->guest_exists($bvm->guest_name);
-#$bvm->deploy_ephemeral;# unless $bvm->guest_exists($bvm->guest_name);
+$bvm->build_disks unless $bvm->guest_exists($bvm->guest_name);
+$bvm->deploy_ephemeral unless $bvm->guest_exists($bvm->guest_name);
 
 #say $bvm->isa('Build::VM');
 #say ref $bvm;
@@ -41,7 +41,7 @@ my $dom = $bvm->find_dom($bvm->guest_name);
 
 $bvm->select_hvm('192.168.15.2')->print_vm_list;
 
-my $ddom = $dom->migrate( $bvm->select_hvm('192.168.15.35')->vmm, Sys::Virt::Domain::MIGRATE_LIVE);
+my $ddom = $dom->migrate( $bvm->select_hvm('192.168.15.2')->vmm, Sys::Virt::Domain::MIGRATE_LIVE);
 
 $bvm->select_hvm('192.168.15.2')->print_vm_list;
 
