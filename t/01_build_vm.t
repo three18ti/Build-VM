@@ -27,8 +27,6 @@ my $bvm = new_ok 'Build::VM' => [
     'hvm_address'       => $hvm_address,
     'template_name'     => 'server-base.tt',
 ];
-use Data::Dump;
-dd $bvm;
 
 my $bvm2 = new_ok 'Build::VM' => [
     'base_image_name'   => 'ubuntu-server-13.10-x86_64-base',
@@ -64,8 +62,10 @@ is $bvm2->guest_xml, get_template_cdrom_xml(),
 #use Data::Dump;
 #print dd $disk_list;
 
-#$bvm->build_disks;
+$bvm->build_disks;
 my $dom = $bvm->deploy_ephemeral;
+
+$_->print_vm_list foreach $bvm->hvm_cluster->list_hvm;
 
 $bvm->hvm->vm_list;
 
