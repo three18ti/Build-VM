@@ -23,10 +23,13 @@ my $bvm = new_ok 'Build::VM' => [
         [shepard    => '192.168.15.2'], 
         [red6       => '192.168.15.40'],
     ],
-    'hvm_target'        => [hostname    => 'kitt'],
+    'hvm_target'        => '192.168.15.35',
     'hvm_address'       => $hvm_address,
     'template_name'     => 'server-base.tt',
 ];
+use Data::Dump;
+dd $bvm;
+
 my $bvm2 = new_ok 'Build::VM' => [
     'base_image_name'   => 'ubuntu-server-13.10-x86_64-base',
     'snap_name'         => '2013-11-13',
@@ -66,10 +69,15 @@ my $dom = $bvm->deploy_ephemeral;
 
 $bvm->hvm->vm_list;
 
+# print all the vms in all the hvms
+#$_->print_vm_list foreach $bvm->list_hvm;
+
 $dom->destroy;
 #$dom->undefine;
 
 $bvm->remove_disks;
+
+
 done_testing;
 
 sub get_template_xml{
