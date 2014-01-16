@@ -1,7 +1,4 @@
-ase_image_name:                 ubuntu-13.10-server-amd64
+ase_image_name:                 ubuntu-server-13.10-x86_64-base
 snap_name:                      2013-12-09
 
-guest_name:                     ubuntu-13.10
-
-cdrom_list:                     [[/media/ubuntu-13.10-server-amd64.iso, vdb]]
-disk_names:                     [[ubuntu-13.10-server-amd64, 5]]
+guest_name:                     ubuntu_test_cluster
