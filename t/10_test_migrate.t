@@ -41,7 +41,7 @@ say ref $dom;
 
 $bvm->select_hvm('192.168.15.2')->print_vm_list;
 
-$bvm->hvm_cluster->_dump_doms($bvm->select_hvm('192.168.15.35'), $bvm->select_hvm('192.168.15.2'));
+$bvm->hvm_cluster->_dump_doms($bvm->select_hvm('192.168.15.2'), $bvm->select_hvm('192.168.15.35'));
 
 #my $ddom = $dom->migrate( $bvm->select_hvm('192.168.15.35')->vmm, Sys::Virt::Domain::MIGRATE_LIVE);
 

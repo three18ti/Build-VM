@@ -8,7 +8,7 @@ storage_disk_size:              20
 rbd_hosts:                      [192.168.0.35, 192.168.0.2, 192.168.0.40]
 
 hvm_address_list:               [[kitt, 192.168.15.35], [shepard, 192.168.15.2], [red6, 192.168.15.40]]
-hvm_target:                     [address, 192.168.0.35]
+hvm_target:                     [address, 192.168.15.35]
 
 template_name:                  server-base.tt
 

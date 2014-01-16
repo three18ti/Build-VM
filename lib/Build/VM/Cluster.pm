@@ -11,9 +11,6 @@ use MooseX::HasDefaults::RO;
 
 use Build::VM::Hypervisor;
 
-use Data::Dump;
-use Data::Dumper;
-
 has 'hvm_address_list' => (
     isa         => 'ArrayRef',
     traits      => ['Array'],
@@ -100,7 +97,6 @@ sub select_hvm {
     my @search_hvm;
     if (ref $_[0] eq 'ARRAY' ) {
         my $hvm = shift @_;
-        say Dumper $hvm;
         @search_hvm = @{$hvm};
         # wtf... this is the same thing but doesn't work
         # @search_hvm = @{$_[0]};
