@@ -52,6 +52,12 @@ sub guest_exists {
 
 sub vm_list {
     my $self = shift;
+    my @dom_list = $self->vmm->list_domains;
+    return \@dom_list;
+}
+
+sub vm_list_all {
+    my $self = shift;
     my @dom_list = $self->vmm->list_all_domains;
     return \@dom_list;
 }

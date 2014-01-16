@@ -36,12 +36,19 @@ $bvm->deploy_ephemeral unless $bvm->guest_exists($bvm->guest_name);
 
 #my $dom = $bvm->get_dom($bvm->guest_name);
 my $dom = $bvm->find_dom($bvm->guest_name);
-
+say ref $dom;
 #dd $dom;
 
 $bvm->select_hvm('192.168.15.2')->print_vm_list;
 
-my $ddom = $dom->migrate( $bvm->select_hvm('192.168.15.2')->vmm, Sys::Virt::Domain::MIGRATE_LIVE);
+$bvm->hvm_cluster->_dump_doms($bvm->select_hvm('192.168.15.35'), $bvm->select_hvm('192.168.15.2'));
+
+#my $ddom = $dom->migrate( $bvm->select_hvm('192.168.15.35')->vmm, Sys::Virt::Domain::MIGRATE_LIVE);
+
+#$dom = $bvm->migrate_dom($dom, $bvm->select_hvm('192.168.15.2'));
+#$dom = $bvm->migrate_dom($dom, $bvm->select_hvm('192.168.15.35'));
+#$dom = $bvm->migrate_dom($dom, $bvm->select_hvm('192.168.15.40'));
+#$dom = $bvm->migrate_dom($dom, $bvm->select_hvm('192.168.15.35'));
 
 $bvm->select_hvm('192.168.15.2')->print_vm_list;
 

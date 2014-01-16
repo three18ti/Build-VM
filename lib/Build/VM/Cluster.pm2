@@ -213,16 +213,8 @@ sub migrate_dom {
         ref $target_hvm eq 'Build::VM::Hypervisor'
             ? $target_hvm
             : $self->select_hvm($target_hvm);
-    my $ddom = $dom->migrate( $hvm->vmm, Sys::Virt::Domain::MIGRATE_LIVE);
 
-}
-
-sub _dump_doms {
-    my $self        = shift;
-    my $hvm         = shift;
-    my $target_hvm  = shift;
-
-    map { $self->migrate_dom($_, $target_hvm) } @{$hvm->vm_list};
+    my $ddom = $dom->migrate( $hvm->vmm, Sys::Virt::Domain::MIGRATE_LIVE );
 }
 
 no Moose;
