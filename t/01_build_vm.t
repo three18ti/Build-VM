@@ -222,7 +222,7 @@ sub get_template_cdrom_xml {
       <driver name='qemu' type='raw'/>
       <source file='/media/ubuntu-13.10-server-amd64.iso'/>
       <readonly/>
-      <target dev='vdb' bus='virtio' />
+      <target dev='vdb' bus='ide' />
     </disk>  
     <interface type='bridge'>
       <source bridge='ovsbr0'/>
