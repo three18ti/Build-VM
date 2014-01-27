@@ -1,4 +1,9 @@
 ase_image_name:                 ubuntu-server-13.10-x86_64-base
 snap_name:                      2013-12-09
 
+hvm_target:                     [address, 192.168.15.2]
+
 guest_name:                     ubuntu_test_cluster
+guest_memory:                   512
+
+disk_names:                     [[ubuntu_test_cluster, null]]
