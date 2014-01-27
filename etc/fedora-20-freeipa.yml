@@ -1,0 +1,4 @@
+base_image_name:                fedora-20-x86_64
+snap_name:                      2014-01-27
+
+guest_name:                     freeipa
