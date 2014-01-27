@@ -118,11 +118,12 @@ has hvm_cluster => (
         );
     },
     handles     => {
-        guest_exists    => 'guest_exists',
-        migrate_dom     => 'migrate_dom',
-        select_hvm      => 'select_hvm',
-        count_hvm       => 'count_hvm',
-        find_dom        => 'find_dom',
+        print_all_vm_list   => 'print_all_vm_list',
+        guest_exists        => 'guest_exists',
+        migrate_dom         => 'migrate_dom',
+        select_hvm          => 'select_hvm',
+        count_hvm           => 'count_hvm',
+        find_dom            => 'find_dom',
     }
     
 );

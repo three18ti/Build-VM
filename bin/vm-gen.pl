@@ -24,13 +24,14 @@ my $bvm = Build::VM->new( { %$default, %$vm });
 
 # What's the difference between new and deploy?
 my $commands = {
-    new     => \&new_vm,
-    list    => \&list_vm,
-    destroy => \&destroy,
-    protect => \&protect,
-    deploy => \&deploy,
-    dumpxml => \&dump_xml,
-    migrate => \&migrate,
+    new         => \&new_vm,
+    list        => \&list_vm,
+    list_all    => \&print_all_vm_list,
+    destroy     => \&destroy,
+    protect     => \&protect,
+    deploy      => \&deploy,
+    dumpxml     => \&dump_xml,
+    migrate     => \&migrate,
 };
 
 $commands->{$command}->($bvm);
@@ -78,6 +79,11 @@ sub protect {
 sub list_vm {
     my $bvm = shift;
     $bvm->hvm->print_vm_list;
+}
+
+sub print_all_vm_list {
+    my $bvm = shift;
+    $bvm->print_all_vm_list;
 }
 
 sub destroy {
