@@ -8,7 +8,7 @@ use warnings;
 use Carp;
 use Template;
 use Sys::Virt;
-use Sys::Guestfs;
+#use Sys::Guestfs;
 use Ceph::RBD::CLI;
 use Build::VM::Host;
 use Build::VM::Guest;
@@ -87,16 +87,16 @@ has guest       => (
     isa         => 'Build::VM::Guest',
     lazy        => 1,
     default     => sub {
-#        my %opt_params;
-#        my $attributes = [qw(
-#            vcpu arch current_memory 
-#            interface bridge virtualport_type 
-#        )];
+        my %opt_params;
+        my $attributes = [qw(
+            vcpu arch current_memory 
+            interface bridge virtualport_type 
+        )];
 
-#        foreach my $attribute (@$attributes) {
-#            my $method_name = "guest_" . $attribute;
-#            $opt_params{$attribute} = $_[0]->$method_name;
-#        }
+        foreach my $attribute (@$attributes) {
+            my $method_name = "guest_" . $attribute;
+            $opt_params{$attribute} = $_[0]->$method_name if $_[0]->$method_name;
+        }
 
 #        $opt_params->{} = $_[0]->guest_vcpu if $_[0]->guest_vcpu;
         
@@ -105,7 +105,7 @@ has guest       => (
             memory  => $_[0]->to_kib($_[0]->guest_memory),
             disk_list   => $_[0]->disk_list,
             cdrom_list  => $_[0]->cdrom_list || [[]],
-#            %opt_params,
+            %opt_params,
         );
     },
 );
