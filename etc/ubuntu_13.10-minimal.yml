@@ -1,0 +1,9 @@
+base_image_name:                 ubuntu-13.10-minimal
+snap_name:                      2014-04-08
+
+guest_name:                     ubuntu-13.10-minimal
+
+#cdrom_list:                     [[/media/ubuntu-13.10-server-amd64.iso, vdb]]
+disk_names:                     [[ubuntu-13.10-minimal, 2]]
+
+hvm_target:                     [address, 192.168.15.2]

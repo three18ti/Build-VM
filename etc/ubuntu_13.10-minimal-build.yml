@@ -1,0 +1,9 @@
+base_image_name:                ubuntu-13.10-minimal
+snap_name:                      2014-04-08
+
+guest_name:                     ubuntu-13.10-minimal-build
+guest_vcpu:                     6
+
+cdrom_list:                     [[/media/ubuntu-13.10-server-amd64.iso, vdc]]
+
+hvm_target:                     [address, 192.168.15.2]

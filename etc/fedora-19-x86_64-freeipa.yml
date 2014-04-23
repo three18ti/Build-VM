@@ -1,0 +1,6 @@
+base_image_name:                fedora-19-x86_64
+snap_name:                      2014-03-19
+
+guest_name:                     freeipa
+guest_memory:                   6144
+hvm_target:                     [hostname, shepard]
