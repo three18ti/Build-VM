@@ -56,6 +56,17 @@ has 'interface' => (
     default         => 'bridge',
 );
 
+has 'num_interfaces'    => (
+    isa             => 'Int',
+    default         => 1,
+);
+
+has 'interfaces' => (
+    isa         => 'ArrayRef',
+    lazy        => 1,
+    default     => sub { my @array = ( 1 .. $_[0]->num_interfaces ); return \@array },
+);
+
 has 'bridge'    => (
     isa             => 'Str',
     default         => 'ovsbr0',

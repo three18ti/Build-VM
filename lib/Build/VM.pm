@@ -73,7 +73,7 @@ has disk_list   => (
     default     => sub { $_[0]->build_disk_list($_[0]->disk_names); },
 );
 
-has [qw(guest_vcpu guest_current_memory)]    => (
+has [qw(guest_vcpu guest_current_memory guest_num_interfaces)]    => (
     isa         => 'Int',
     required    => 0,
 );
@@ -89,13 +89,15 @@ has guest       => (
     default     => sub {
         my %opt_params;
         my $attributes = [qw(
-            vcpu arch current_memory 
+            vcpu arch current_memory num_interfaces
             interface bridge virtualport_type 
         )];
 
         foreach my $attribute (@$attributes) {
             my $method_name = "guest_" . $attribute;
             $opt_params{$attribute} = $_[0]->$method_name if $_[0]->$method_name;
+            # Probably a better way to set current memory...
+#            $opt_params{$attribute} = $_[0]->to_kib($_[0]->$method_name) if $method_name eq 'guest_current_memory';
         }
 
 #        $opt_params->{} = $_[0]->guest_vcpu if $_[0]->guest_vcpu;
@@ -194,7 +196,7 @@ sub build_template {
             host    => $self->host,
         },
         \$xml,
-    );
+    ) || carp $tt->error;
     return $xml;
 }
 

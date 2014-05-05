@@ -44,12 +44,14 @@
     [%- END %]  
     [%- END -%]
 
+    [%- FOREACH count IN guest.interfaces %]
     <interface type='[% guest.interface %]'>
       <source bridge='[% guest.bridge %]'/>
       <virtualport type='[%- guest.virtualport_type -%]'>
       </virtualport>
       <model type='virtio'/>
     </interface>
+    [%- END -%]
 
     <controller type='usb' index='0'>
     </controller>

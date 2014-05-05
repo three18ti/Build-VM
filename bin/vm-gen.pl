@@ -25,6 +25,7 @@ my $bvm = Build::VM->new( { %$default, %$vm });
 # What's the difference between new and deploy?
 my $commands = {
     new         => \&new_vm,
+    start       => \&start_vm,
     list        => \&list_vm,
     list_all    => \&print_all_vm_list,
     destroy     => \&destroy,
@@ -41,6 +42,18 @@ sub new_vm {
     my $dom;
     unless ($bvm->hvm->guest_exists($bvm->guest_name)) {
         $bvm->build_disks;
+        my $dom = $bvm->deploy_ephemeral;
+    }
+    else {
+        say "Vm exists";
+    }
+    $bvm->hvm->print_vm_list;
+}
+
+sub start_vm {
+    my $bvm = shift;
+    my $dom;
+    unless ($bvm->hvm->guest_exists($bvm->guest_name)) {
         my $dom = $bvm->deploy_ephemeral;
     }
     else {
