@@ -1,0 +1,84 @@
+<domain type='kvm'>
+  <name>[% guest.name %]</name>
+  <memory unit='KiB'>[% guest.memory %]</memory>
+  <currentMemory unit='KiB'>[% guest.current_memory %]</currentMemory>
+  <vcpu placement='static'>[% guest.vcpu %]</vcpu>
+  [%- IF guest.current_memory != guest.memory %]
+  <memtune>
+    <min_guarantee unit='KiB'>[% guest.current_memory %]</min_guarantee>
+  </memtune>
+  [% END -%]
+  <os>
+    <type arch='[% guest.arch%]' machine='pc-i440fx-1.4'>hvm</type>
+    [%- IF guest.cdrom_list.0.0 %]    
+    <boot dev='cdrom' />
+    [%- END %]
+    <boot dev='hd'/>
+    <bootmenu enable='no'/>
+  </os>
+  <features>
+    <acpi/>
+    <apic/>
+    <pae/>
+  </features>
+  <clock offset='utc'/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <devices>
+    <emulator>/usr/bin/kvm</emulator>
+    [%- FOREACH disk IN guest.disk_list %]
+    <disk type='network' device='disk'>
+      <driver name='qemu'/>
+      <source protocol='rbd' name='[%- host.rbd_pool -%]/[%- disk.0 -%]'>
+        [%- FOREACH rbd_host IN host.rbd_hosts %]
+        <host name='[%- rbd_host -%]' port='6789'/>
+        [%- END %]
+      </source>
+      <target dev='[%- disk.1 -%]' bus='virtio' />
+    </disk>
+    [%- END -%]
+    [%- IF guest.cdrom_list.0.0 %]
+    [%- FOREACH cdrom IN guest.cdrom_list %]
+    <disk type='file' device='cdrom'>
+      <driver name='qemu' type='raw'/>
+      <source file='[%- cdrom.0 -%]'/>
+      <readonly/>
+      <target dev='[%- cdrom.1 -%]' bus='ide' />
+    </disk>
+    [%- END %]  
+    [%- END -%]
+
+    <interface type='[% guest.interface %]'>
+      <source bridge='[% guest.bridge %]'/>
+      <virtualport type='[%- guest.virtualport_type -%]'>
+      </virtualport>
+      <model type='virtio'/>
+    </interface>
+
+    <controller type='usb' index='0'>
+    </controller>
+    <controller type='ide' index='0'>
+    </controller>
+    <controller type='virtio-serial' index='0'>
+    </controller>
+    <serial type='pty'>
+      <target port='0'/>
+    </serial>
+    <console type='pty'>
+      <target type='serial' port='0'/>
+    </console>
+    <input type='mouse' bus='ps2'/>
+    <graphics type='vnc' port='-1' autoport='yes'/>
+    <sound model='ich6'>
+    </sound>
+
+    <video>
+      <model type='cirrus' vram='9216' heads='1'/>
+    </video>
+
+    <memballoon model='virtio'>
+    </memballoon>
+
+  </devices>
+</domain>
