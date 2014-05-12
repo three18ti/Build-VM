@@ -1,3 +1,5 @@
+![Build Status](https://secure.travis-ci.org/three18ti/Build-VM.png?branch=cluster)](https://travis-ci.org/three18ti/Build-VM)
+
 App to build RBD based libvirt virtual machines
 
 App is able to build disks and vm.  See t/01_build_vm.t for usage examples.
