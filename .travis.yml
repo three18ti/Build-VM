@@ -9,6 +9,11 @@ perl:
 
 before_install:
 
+   # install some packages
+   sudo apt-get update -qq
+   sudo apt-get -y install libvirt-bin libvirt-dev libsys-virt-perl 
+   sudo apt-get -y install libguestfs-tools guestfish
+
    # Prevent "Please tell me who you are" errors for certain DZIL configs
    - git config --global user.name "TravisCI"
    - git clone https://github.com/three18ti/Ceph-CLI.git ceph-cli
