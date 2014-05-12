@@ -6,6 +6,7 @@ App is able to build disks and vm.  See t/01_build_vm.t for usage examples.
 Currently requires base vm to be built, snapshot name to be specified.
 
 TODO:
+
     - Rewrite bin/vm-gen.pl to take cli / yaml config parameters - takes yaml config parameters
 
     - handle snapshot name generation / discovery
