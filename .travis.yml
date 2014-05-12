@@ -13,7 +13,6 @@ before_install:
    - sudo apt-get update -qq
    - sudo apt-get -y install libvirt-bin libvirt-dev libsys-virt-perl 
    - sudo apt-get -y install libguestfs-tools guestfish
-   - dpkg -L libsys-virt-perl
 
    # Prevent "Please tell me who you are" errors for certain DZIL configs
    - git config --global user.name "TravisCI"
@@ -31,8 +30,9 @@ install:
 
    - export RELEASE_TESTING=1 AUTOMATED_TESTING=1 AUTHOR_TESTING=1 HARNESS_OPTIONS=j10:c HARNESS_TIMER=1
 
-script:
+   - dzil listdeps | grep -vP '[^\w:]' | xargs cpanm --verbose --skip-satisfied --notest --force
 
-   - dzil install
+
+script:
 
    - dzil smoke --release --author
