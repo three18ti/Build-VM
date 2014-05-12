@@ -19,7 +19,7 @@ install:
 
    - cpanm --quiet --notest --skip-satisfied Dist::Zilla
 
-   - cd ceph-cli && dzil install
+   - cd ceph-cli && dzil listdeps --missing | cpanm --skip-satisfied && dzil install
 
    - dzil authordeps | grep -vP '[^\w:]' | xargs -n 5 -P 10 cpanm --quiet --notest --skip-satisfied
 
