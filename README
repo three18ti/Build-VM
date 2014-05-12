@@ -1,4 +1,4 @@
-![Build Status](https://secure.travis-ci.org/three18ti/Build-VM.png?branch=cluster)](https://travis-ci.org/three18ti/Build-VM)
+[![Build Status](https://secure.travis-ci.org/three18ti/Build-VM.png?branch=cluster)](https://travis-ci.org/three18ti/Build-VM)
 
 App to build RBD based libvirt virtual machines
 
