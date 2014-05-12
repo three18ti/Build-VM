@@ -33,4 +33,6 @@ install:
 
 script:
 
+   - dzil install
+
    - dzil smoke --release --author
