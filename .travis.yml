@@ -12,7 +12,6 @@ before_install:
    # install some packages
    - sudo apt-get update -qq
    - sudo apt-get -y install libvirt-bin libvirt-dev libsys-virt-perl 
-   - perl -MSys::Virt\ 99999 -e 1
    - sudo apt-get -y install libguestfs-tools guestfish
 
    # Prevent "Please tell me who you are" errors for certain DZIL configs
