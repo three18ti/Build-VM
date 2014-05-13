@@ -1,3 +1,5 @@
+
+
 package Build::VM::Hypervisor;
 use 5.010;
 use Moose;
@@ -50,7 +52,7 @@ sub guest_exists {
     my $matches = grep { $_->get_name eq $guest_name } @dom_list;
 }
 
-sub vm_list {
+sub vm_list_active {
     my $self = shift;
     my @dom_list = $self->vmm->list_domains;
     return \@dom_list;
@@ -64,8 +66,11 @@ sub vm_list_all {
 
 sub print_vm_list {
     my $self = shift;
+    my $list = shift;
 
-    my @dom_list = $self->vmm->list_all_domains;
+    my $vm_list = "vm_list_$list";
+
+    my @dom_list = @{ $self->$vm_list };
     @dom_list = sort { $b->get_id <=> $a->get_id } @dom_list;
     
     say sprintf " VM ID: | Name:                                     | State:    | Persistence:";
