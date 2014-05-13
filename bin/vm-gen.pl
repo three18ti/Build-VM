@@ -133,10 +133,10 @@ sub dump_xml {
 #}
 sub migrate {
     my $bvm     = shift;
-    $bvm->select_hvm('192.168.15.35')->print_vm_list;
+    $bvm->select_hvm('192.168.15.35')->print_vm_list('active');
     $bvm->migrate_dom($bvm->guest_name, [address => '192.168.15.2']);
-    $bvm->select_hvm('192.168.15.2')->print_vm_list;
-    $bvm->select_hvm('192.168.15.35')->print_vm_list;
+    $bvm->select_hvm('192.168.15.2')->print_vm_list('active');
+    $bvm->select_hvm('192.168.15.35')->print_vm_list('active');
 }
 #sub migrate {
 #    my $bvm     = shift;

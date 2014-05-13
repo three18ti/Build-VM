@@ -3,4 +3,4 @@ snap_name:                      2013-12-09
 
 guest_name:                     live-hvm-test
 
-hvm_target:                     [address, 192.168.15.91]
+hvm_target:                     [hostname, kitt]
