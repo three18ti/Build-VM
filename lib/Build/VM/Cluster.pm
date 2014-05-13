@@ -166,11 +166,12 @@ sub print_hvm_list {
 # Print vms on all the hypervisors
 sub print_all_vm_list {
     my $self = shift;
+    my $list = shift;
 
     foreach my $hvm ( $self->list_hvm ) {
         my $hvm_id = $hvm->hostname ? $hvm->hostname : $hvm->address;
         say sprintf "HVM ID: | % -40s ", $hvm_id;
-        $hvm->print_vm_list;
+        $hvm->print_vm_list($list);
     }
 }
 

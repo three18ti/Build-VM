@@ -26,7 +26,9 @@ my $bvm = Build::VM->new( { %$default, %$vm });
 my $commands = {
     new         => \&new_vm,
     start       => \&start_vm,
-    list        => \&list_vm,
+    list        => \&print_all_vm_list_active,
+    list_local  => \&list_vm,
+    list_active => \&list_active,
     list_all    => \&print_all_vm_list,
     destroy     => \&destroy,
     protect     => \&protect,
@@ -91,12 +93,22 @@ sub protect {
 
 sub list_vm {
     my $bvm = shift;
-    $bvm->hvm->print_vm_list;
+    $bvm->hvm->print_vm_list('all');
 }
 
 sub print_all_vm_list {
     my $bvm = shift;
-    $bvm->print_all_vm_list;
+    $bvm->print_all_vm_list('all');
+}
+
+sub print_all_vm_list_active {
+    my $bvm = shift;
+    $bvm->print_all_vm_list('active');
+}
+
+sub list_active {
+    my $bvm = shift;
+    $bvm->hvm->print_vm_list('active');
 }
 
 sub destroy {
