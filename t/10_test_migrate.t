@@ -28,7 +28,14 @@ my $bvm = new_ok 'Build::VM' => [
     'template_name'     => 'server-base.tt',
 ];
 
-$bvm->build_disks unless $bvm->guest_exists($bvm->guest_name);
+print $bvm->guest_exists($bvm->guest_name);
+
+__END__
+$bvm->build_disks;
+__END__
+ unless 
+__END__
+
 $bvm->deploy_ephemeral unless $bvm->guest_exists($bvm->guest_name);
 
 #say $bvm->isa('Build::VM');

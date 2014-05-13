@@ -17,7 +17,7 @@ is $hv->uri, 'qemu+ssh://192.168.0.35/session?socket=/var/run/libvirt/libvirt-so
     "uri is as expected";
 is $hv->guest_exists('asdf'), '0', "Guest asdf doesn't exist";
 
-my $vm_name = $hv->vm_list->[0]->get_name;
+my $vm_name = $hv->vm_list_active->[0]->get_name;
 is $hv->guest_exists($vm_name), '1',
     "Guest $vm_name Exists";
 

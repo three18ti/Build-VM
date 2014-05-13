@@ -39,7 +39,7 @@ has vmm         => (
 sub get_dom {
     my $self = shift;
     my $guest_name = shift;
-    my $vm_list = $self->vm_list;
+    my $vm_list = $self->vm_list_active;
 
     first { $_->get_name eq $guest_name } @$vm_list;
 }
@@ -66,7 +66,7 @@ sub vm_list_all {
 
 sub print_vm_list {
     my $self = shift;
-    my $list = shift;
+    my $list = shift // 'all';
 
     my $vm_list = "vm_list_$list";
 
