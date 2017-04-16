@@ -1,0 +1,7 @@
+base_image_name:                fedora-20-x86_64
+snap_name:                      2014-01-27
+
+guest_name:                     fedora_20
+
+cdrom_list:                     [[/media/Fedora-20-x86_64-netinst.iso, hda]]
+disk_names:                     [[fedora-20-x86_64, 5]]

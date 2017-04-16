@@ -8,18 +8,28 @@ use warnings;
 use Carp;
 use Template;
 use Sys::Virt;
-use Sys::Guestfs;
+#use Sys::Guestfs;
 use Ceph::RBD::CLI;
 use Build::VM::Host;
 use Build::VM::Guest;
-use Build::VM::Hypervisor;
+use Build::VM::Cluster;
+#use Build::VM::Hypervisor;
 use MooseX::HasDefaults::RO;
 use File::ShareDir 'dist_dir';
 use List::MoreUtils qw( each_array );
 
-has [qw ( base_image_name snap_name guest_name hvm_address) ]  => (
+has [qw ( base_image_name snap_name guest_name ) ]  => (
     isa         => 'Str',
-    required    => 1
+    required    => 1,
+);
+
+has hvm_target  => (
+    required    => 1,
+);
+
+has hvm_address_list    => (
+    isa         => 'ArrayRef',
+    required    =>  1,
 );
 
 has [qw(guest_memory storage_disk_size)] => (
@@ -63,15 +73,41 @@ has disk_list   => (
     default     => sub { $_[0]->build_disk_list($_[0]->disk_names); },
 );
 
+has [qw(guest_vcpu guest_current_memory guest_num_interfaces)]    => (
+    isa         => 'Int',
+    required    => 0,
+);
+
+has [qw(guest_arch guest_interface guest_bridge guest_virtualport_type)]    => (
+    isa         => 'Str',
+    required    => 0,
+);
+
 has guest       => (
     isa         => 'Build::VM::Guest',
     lazy        => 1,
     default     => sub {
+        my %opt_params;
+        my $attributes = [qw(
+            vcpu arch current_memory num_interfaces
+            interface bridge virtualport_type 
+        )];
+
+        foreach my $attribute (@$attributes) {
+            my $method_name = "guest_" . $attribute;
+            $opt_params{$attribute} = $_[0]->$method_name if $_[0]->$method_name;
+            # Probably a better way to set current memory...
+#            $opt_params{$attribute} = $_[0]->to_kib($_[0]->$method_name) if $method_name eq 'guest_current_memory';
+        }
+
+#        $opt_params->{} = $_[0]->guest_vcpu if $_[0]->guest_vcpu;
+        
         Build::VM::Guest->new(
             name    => $_[0]->guest_name,
             memory  => $_[0]->to_kib($_[0]->guest_memory),
             disk_list   => $_[0]->disk_list,
             cdrom_list  => $_[0]->cdrom_list || [[]],
+            %opt_params,
         );
     },
 );
@@ -98,13 +134,34 @@ has rbd         => (
     },
 );
 
+has hvm_cluster => (
+    isa         => 'Build::VM::Cluster',
+    lazy        => 1,
+    default     => sub {
+        Build::VM::Cluster->new(
+            hvm_address_list    => $_[0]->hvm_address_list,
+            rbd_hosts_list      => $_[0]->rbd_hosts,
+        );
+    },
+    handles     => {
+        print_all_vm_list   => 'print_all_vm_list',
+        guest_exists        => 'guest_exists',
+        migrate_dom         => 'migrate_dom',
+        select_hvm          => 'select_hvm',
+        count_hvm           => 'count_hvm',
+        find_dom            => 'find_dom',
+    }
+    
+);
+
 has hvm         => (
     isa         => 'Build::VM::Hypervisor',
     lazy        => 1,
     default     => sub {
-        Build::VM::Hypervisor->new(
-            address => $_[0]->hvm_address
-        );
+        $_[0]->select_hvm($_[0]->hvm_target)
+    },
+    handles     => {
+        get_dom     => 'get_dom',
     }
 );
 
@@ -139,7 +196,7 @@ sub build_template {
             host    => $self->host,
         },
         \$xml,
-    );
+    ) || carp $tt->error;
     return $xml;
 }
 

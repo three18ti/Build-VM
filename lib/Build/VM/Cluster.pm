@@ -6,18 +6,17 @@ use Moose;
 use strict;
 use warnings;
 use Data::Validate::IP;
+use List::Util qw(first);
 use MooseX::HasDefaults::RO;
 
 use Build::VM::Hypervisor;
-
-use Data::Dump;
 
 has 'hvm_address_list' => (
     isa         => 'ArrayRef',
     traits      => ['Array'],
     required    => 1,
     handles     => {
-        'count_hvm'     => 'count',
+        'hvm_address_count' => 'count',
         'hvm_elements'  => 'elements',
     },
 );
@@ -30,7 +29,7 @@ has 'rbd_pool'  => (
 has 'rbd_hosts_list' => (
     isa         => 'ArrayRef[Str]',
     traits      => ['Array'],
-    required    => 1,
+#    required    => 1,
     handles     => {
         rbd_hosts => 'elements',
     },
@@ -44,6 +43,7 @@ has '_hvm_list' => (
     handles     => {
         list_hvm    => 'elements',
         find_hvm    => 'first',
+        count_hvm   => 'count',
     },
 );
 
@@ -54,7 +54,7 @@ sub _build_hvm_list {
 
     my $hvm_list;
     # test if arrayref or single address, set the one 
-    if ($self->count_hvm == 1) {
+    if ($self->hvm_address_count == 1) {
         push @{$hvm_list}, Build::VM::Hypervisor->new ( 
             # This is dumb... already an arrayref
             #address =>  [$self->hvm_address->shift],
@@ -93,8 +93,23 @@ sub _build_hvm_list {
 
 sub select_hvm {
     my $self        = shift;
-    my @search_hvm  = @_;
-    
+
+    my @search_hvm;
+    if (ref $_[0] eq 'ARRAY' ) {
+        my $hvm = shift @_;
+        @search_hvm = @{$hvm};
+        # wtf... this is the same thing but doesn't work
+        # @search_hvm = @{$_[0]};
+    }
+    # untested
+    elsif ( ref $_[0] eq 'HASH' ) {
+        push @search_hvm, $_[0]->{hostname};
+        push @search_hvm, $_[0]->{address};
+    }
+    else {
+        @search_hvm = @_;
+    }
+
     # Hopefully we'll find hvm, otherwise undef
     my $hvm;    
     # Actually, search first by ip.  For some reason I don't think that you'd just call 
@@ -128,8 +143,85 @@ sub select_hvm {
 #    elsif (
 }
 
+sub print_hvm_list {
+    my $self = shift;
+    
+    foreach my $hvm ( $self->list_hvm ) {
+#        if 
+    }    
+
+#    say sprintf "   ID:  | Name:                                     | State:    | Persistence:";
+#    say sprintf "--------|-------------------------------------------|-----------|-------------";
+#    foreach my $dom (@dom_list) {
+#        say sprintf "  % 4s  | % -40s  | % -8s  | % -10s",
+#            $dom->get_id == '-1' ? "off" : $dom->get_id,
+#                $dom->get_name,
+#                $dom->is_active ? "active" : "inactive",
+#                $dom->is_persistent ? "persistent" : "ephemeral";
+#    }
+
+
+}
+
+# Print vms on all the hypervisors
+sub print_all_vm_list {
+    my $self = shift;
+
+    foreach my $hvm ( $self->list_hvm ) {
+        my $hvm_id = $hvm->hostname ? $hvm->hostname : $hvm->address;
+        say sprintf "HVM ID: | % -40s ", $hvm_id;
+        $hvm->print_vm_list;
+    }
+}
+
+sub find_dom {
+    my $self        = shift;
+    my $guest_name  = shift;
+
+    # There's probably a better way to do this...
+    my $hvm = first { 
+        $_->get_dom($guest_name);
+    } $self->list_hvm;
+
+    $hvm->get_dom($guest_name);
+}
+
+sub guest_exists {
+    my $self        = shift;
+    my $guest_name  = shift;
+
+    $self->find_dom($guest_name)
+        ? 1
+        : 0;
+}
+
+sub migrate_dom {
+    my $self        = shift;
+    my $guest       = shift;
+    my $target_hvm  = shift;
+
+    my $dom =
+        ref $guest eq 'Sys::Virt::Domain'
+            ? $guest
+            : $self->find_dom($guest);
+
+    my $hvm = 
+        ref $target_hvm eq 'Build::VM::Hypervisor'
+            ? $target_hvm
+            : $self->select_hvm($target_hvm);
+    my $ddom = $dom->migrate( $hvm->vmm, Sys::Virt::Domain::MIGRATE_LIVE);
+
+}
+
+sub _dump_doms {
+    my $self        = shift;
+    my $hvm         = shift;
+    my $target_hvm  = shift;
+
+    map { $self->migrate_dom($_, $target_hvm) } @{$hvm->vm_list};
+}
+
 no Moose;
 __PACKAGE__->meta->make_immutable;
 1;
 __END__
-

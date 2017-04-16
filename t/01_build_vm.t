@@ -3,13 +3,14 @@ use 5.010;
 use strict;
 use warnings;
 
+use Data::Dump;
 use Test::More tests => 5; 
 
 use lib 'lib';
 
 BEGIN { use_ok 'Build::VM' }
 
-my $hvm_address = '192.168.0.35';
+my $hvm_address = '192.168.15.35';
 
 my $bvm = new_ok 'Build::VM' => [
     'base_image_name'   => 'ubuntu-server-13.10-x86_64-base',
@@ -18,9 +19,16 @@ my $bvm = new_ok 'Build::VM' => [
     'guest_memory'      => 4096,
     'storage_disk_size' => 20,
     'rbd_hosts'         => [qw(192.168.0.35 192.168.0.2 192.168.0.40)],
+    'hvm_address_list'  => [
+        [kitt       => '192.168.15.35'], 
+        [shepard    => '192.168.15.2'], 
+        [red6       => '192.168.15.40'],
+    ],
+    'hvm_target'        => '192.168.15.35',
     'hvm_address'       => $hvm_address,
     'template_name'     => 'server-base.tt',
 ];
+
 my $bvm2 = new_ok 'Build::VM' => [
     'base_image_name'   => 'ubuntu-server-13.10-x86_64-base',
     'snap_name'         => '2013-11-13',
@@ -29,6 +37,12 @@ my $bvm2 = new_ok 'Build::VM' => [
     'storage_disk_size' => 20,
     'rbd_hosts'         => [qw(192.168.0.35 192.168.0.2 192.168.0.40)],
     'cdrom_list'        => [[ '/media/ubuntu-13.10-server-amd64.iso', 'vdb'],],
+    'hvm_address_list'  => [
+        [kitt       => '192.168.15.35'], 
+        [shepard    => '192.168.15.2'], 
+        [red6       => '192.168.15.40'],
+    ],
+    'hvm_target'        => [address     => $hvm_address],
     'hvm_address'       => $hvm_address,
     'template_name'     => 'server-base.tt',
 ];
@@ -51,13 +65,38 @@ is $bvm2->guest_xml, get_template_cdrom_xml(),
 
 $bvm->build_disks;
 my $dom = $bvm->deploy_ephemeral;
+#my $dom = $bvm2->deploy_ephemeral;
 
+$bvm->select_hvm('192.168.15.35')->print_vm_list;
+$bvm->select_hvm('192.168.15.2')->print_vm_list;
+
+say "Migrating VM";
+say "#" x 25;
+
+my $ddom = $dom->migrate($bvm2->select_hvm('192.168.15.2')->vmm, 
+Sys::Virt::Domain::MIGRATE_LIVE);
+
+$bvm->select_hvm('192.168.15.2')->print_vm_list;
+
+
+#$_->print_vm_list foreach $bvm->hvm_cluster->list_hvm;
+
+#dd $bvm2->hvm_target;
 $bvm->hvm->vm_list;
 
-$dom->destroy;
+# print all the vms in all the hvms
+#$_->print_vm_list foreach $bvm->list_hvm;
+
+dd $dom;
+dd $ddom;
+
+eval { $dom->destroy };
+$ddom->destroy;
 #$dom->undefine;
 
 $bvm->remove_disks;
+
+
 done_testing;
 
 sub get_template_xml{
@@ -183,7 +222,7 @@ sub get_template_cdrom_xml {
       <driver name='qemu' type='raw'/>
       <source file='/media/ubuntu-13.10-server-amd64.iso'/>
       <readonly/>
-      <target dev='vdb' bus='virtio' />
+      <target dev='vdb' bus='ide' />
     </disk>  
     <interface type='bridge'>
       <source bridge='ovsbr0'/>

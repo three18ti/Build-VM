@@ -1,0 +1,8 @@
+base_image_name:                zentyal-3.3-amd64
+snap_name:                      2014-01-26
+
+guest_name:                     zentyal-3.3-amd64-install
+
+#cdrom_list:                     [[/media/ubuntu-13.10-server-amd64.iso, vdb]]
+cdrom_list:                     [[/media/zentyal-3.3-amd64.iso, vdb]]
+disk_names:                     [[zentyal-3.3-amd64, 10]]

@@ -3,6 +3,11 @@
   <memory unit='KiB'>[% guest.memory %]</memory>
   <currentMemory unit='KiB'>[% guest.current_memory %]</currentMemory>
   <vcpu placement='static'>[% guest.vcpu %]</vcpu>
+  [%- IF guest.current_memory != guest.memory %]
+  <memtune>
+    <min_guarantee unit='KiB'>[% guest.current_memory %]</min_guarantee>
+  </memtune>
+  [% END -%]
   <os>
     <type arch='[% guest.arch%]' machine='pc-i440fx-1.4'>hvm</type>
     [%- IF guest.cdrom_list.0.0 %]    
@@ -44,14 +49,12 @@
     [%- END %]  
     [%- END -%]
 
-    [%- FOREACH count IN guest.interfaces %]
     <interface type='[% guest.interface %]'>
       <source bridge='[% guest.bridge %]'/>
       <virtualport type='[%- guest.virtualport_type -%]'>
       </virtualport>
       <model type='virtio'/>
     </interface>
-    [%- END -%]
 
     <controller type='usb' index='0'>
     </controller>
