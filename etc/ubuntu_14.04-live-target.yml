@@ -2,7 +2,7 @@ base_image_name:                ubuntu-14.04-server-amd64
 snap_name:                      2014-04-20
 
 guest_name:                     ubuntu-14.04-target
-guest_vcpu:                     4
+guest_vcpu:                     6
 guest_memory:                   4096
 
 #cdrom_list:                     [[/media/ubuntu-14.04-server-amd64.iso, vdb]]
